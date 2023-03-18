@@ -1,0 +1,7 @@
+.post__title-area {
+    width: 100%;
+    max-width: calc(100% - 36px);
+    padding: 25px 15px 31px 21px;
+    display: flex;
+    align-items: center;
+}

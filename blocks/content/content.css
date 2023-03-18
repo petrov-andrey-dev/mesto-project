@@ -1,0 +1,10 @@
+.content {
+    width: 100%;
+    max-width: calc(880px + 2*19px);
+    min-width: 320px;
+    padding: 0 19px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}

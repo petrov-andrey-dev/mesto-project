@@ -1,0 +1,19 @@
+.profile__info {
+    max-width: 336px;
+    padding-left: 30px;
+    color: #fff;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    row-gap: 16px;
+}
+
+@media screen and (max-width: 540px) {
+    .profile__info {
+        max-width: 250px;
+        padding: 26px 0 0;
+        font-size: 14px;
+        line-height: 17px;
+        justify-content: center;
+    }
+}
