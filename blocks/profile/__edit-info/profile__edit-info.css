@@ -1,6 +1,6 @@
 .profile__edit-info {
     padding: 0;
-    margin-left: auto;
+    margin-left: 18px;
     width: 24px;
     height: 24px;
     border: 1px solid #fff;
@@ -19,6 +19,7 @@
 
 @media screen and (max-width: 540px) {
     .profile__edit-info {
+        padding: 0 0 0 15px;
         width: 18px;
         height: 18px;
     }

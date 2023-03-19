@@ -1,4 +1,15 @@
 .post__like {
+    width: 22px;
+    height: 19px;
+    padding: 0;
+    border: none;
     margin-left: auto;
     cursor: pointer;
+    background-image: url(../../../images/like-unliked.svg);
+    background-size: cover;
+    background-color: transparent;
+}
+
+.post__like:hover {
+    opacity: .5;
 }

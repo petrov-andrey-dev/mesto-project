@@ -2,3 +2,9 @@
     width: 100%;
     padding-top: 51px;
 }
+
+@media screen and (max-width: 540px) {
+    .posts {
+        padding-top: 36px;
+    }
+}
