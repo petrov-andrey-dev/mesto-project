@@ -1,6 +1,7 @@
 .profile__description {
     margin: 0;
-    max-width: 336px;
+    max-width: 100%;
+    /* max-width: 336px; */
     font-weight: 400;
     font-size: 18px;
     line-height: 22px;
@@ -15,3 +16,9 @@
         line-height: 17px;
     }
 }
+
+/* @media screen and (max-width: 410px) {
+    .profile__description {
+        max-width: 282px;
+    }
+} */

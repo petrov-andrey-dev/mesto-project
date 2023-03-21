@@ -5,7 +5,7 @@
     text-decoration: none;
     cursor: pointer;
     background-image: url(../../../images/logo/logo_theme_dark.svg);
-    background-size: cover;
+    background-size: contain;
     background-repeat: no-repeat;
 }
 

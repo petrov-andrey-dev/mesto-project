@@ -3,7 +3,7 @@
     max-width: calc(880px + 2*19px);
     min-width: 320px;
     padding: 45px 19px 41px;
-    border-bottom: 1px solid rgba(84, 84, 84, 1);
+    border-bottom: 1px solid rgba(84, 84, 84, .7);
     box-sizing: border-box;
 }
 

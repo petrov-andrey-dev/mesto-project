@@ -1,5 +1,6 @@
 .profile__info {
-    max-width: 336px;
+    width: 100%;
+    max-width: calc(100% - 320px);
     padding-left: 30px;
     color: #fff;
     display: flex;
@@ -8,9 +9,16 @@
     row-gap: 16px;
 }
 
+@media screen and (max-width: 720px) {
+    .profile__info {
+        max-width: calc(100% - 150px);
+    }
+    
+}
+
 @media screen and (max-width: 540px) {
     .profile__info {
-        max-width: 250px;
+        max-width: 100%;
         padding: 26px 0 0;
         font-size: 14px;
         line-height: 17px;
