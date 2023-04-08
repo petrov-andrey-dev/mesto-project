@@ -32,7 +32,7 @@
         </section>
         <section class="posts">
             <ul class="posts__grid">
-                <li class="post">
+                <!-- <li class="post">
                     <img src="./images/kirill-pershin-1088404-unsplash.jpg" alt="монастырь в горах" class="post__img">
                     <div class="post__title-area">
                         <h2 class="post__title">Карачаевск</h2>
@@ -73,7 +73,7 @@
                         <h2 class="post__title">Карачаево-Черкесия</h2>
                         <button type="button" class="post__like" aria-label="Like"></button>
                     </div>
-                </li>
+                </li> -->
             </ul>
         </section>
     </main>
@@ -81,17 +81,39 @@
         <p class="footer__copyright">© 2020 Mesto Russia</p>
     </footer>
     <!-- Класс для открытия попапа popup_opened-->
-    <div class="popup">
+    <div class="popup popup_type_edit">
         <div class="popup__container">
-            <button class="popup__close" type="button"  aria-label="Close"></button>
+            <button class="popup__close" type="button" aria-label="Close"></button>
             <h2 class="popup__title">Редактировать профиль</h2>
             <form action="#" class="popup__form" name="edit_profile" method="post">
                 <input type="text" class="popup__text-input" id="name" name="name" placeholder="Имя">
                 <input type="text" class="popup__text-input" id="description" name="description" placeholder="О себе">
-                <button class="popup__submit" type="submit"  aria-label="Submit">Сохранить</button>
+                <button class="popup__submit" type="submit" aria-label="Submit">Сохранить</button>
             </form>
         </div>
     </div>
+    <div class="popup popup_type_add">
+        <div class="popup__container">
+            <button class="popup__close" type="button" aria-label="Close"></button>
+            <h2 class="popup__title">Редактировать профиль</h2>
+            <form action="#" class="popup__form" name="add_post" method="post">
+                <input type="text" class="popup__text-input" id="caption" name="caption" placeholder="Название">
+                <input type="text" class="popup__text-input" id="link" name="link" placeholder="Ссылка">
+                <button class="popup__submit" type="submit" aria-label="Submit">Сохранить</button>
+            </form>
+        </div>
+    </div>
+    
+    <template id="post">
+        <li class="post">
+            <img src="#" alt="пользовательское фото" class="post__img">
+            <button type="button" class="post__trash" aria-label="trash"></button>
+            <div class="post__title-area">
+                <h2 class="post__title"></h2>
+                <button type="button" class="post__like" aria-label="Like"></button>
+            </div>
+        </li>
+    </template>
     <script src="./index.js"></script>
 </body>
 </html>

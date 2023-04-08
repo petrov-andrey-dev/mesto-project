@@ -1,0 +1,20 @@
+.post__trash {
+    width: 18px;
+    height: 19px;
+    padding: 0;
+    border: none;
+    margin-left: auto;
+    cursor: pointer;
+    background-image: url(../../../images/trash.svg);
+    background-color: transparent;
+    background-size: cover;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    transition: opacity .2s linear;
+    cursor: pointer;
+}
+
+.post__trash:hover {
+    opacity: .6;
+}
