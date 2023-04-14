@@ -6,8 +6,10 @@
     margin-left: auto;
     cursor: pointer;
     background-image: url(../../../images/like-unliked.svg);
-    background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
     background-color: transparent;
+    transition: .2s;
 }
 
 .post__like:hover {

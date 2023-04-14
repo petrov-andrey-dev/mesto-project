@@ -7,6 +7,7 @@ const nameInput = document.querySelector('#name');
 const descriptionInput = document.querySelector('#description');
 const popupEdit = document.querySelector('.popup_type_edit');
 const popupAdd = document.querySelector('.popup_type_add');
+const popupImage = document.querySelector('.popup_type_image');
 const addPostBtn = document.querySelector('.profile__add-post');
 
 const initialCards = [
@@ -36,22 +37,6 @@ const initialCards = [
     }
   ]; 
 
-function addPost(link, name) {
-    const postGrid = document.querySelector('.posts__grid');
-    const post = document.querySelector('#post').content;
-
-    if (link && name) {
-        const postElement = post.querySelector('.post').cloneNode(true);
-        postElement.querySelector('.post__img').src = link;
-        postElement.querySelector('.post__title').textContent = name;
-        postElement.querySelector('.post__like').addEventListener('click', (evt) => { evt.target.classList.toggle('post__like_liked') });
-        postElement.querySelector('.post__trash').addEventListener('click', (evt) => { evt.target.closest('.post').remove() });
-        postGrid.prepend(postElement);
-    } else {
-        console.log('Поля имя и ссылка должны быть заполнена');
-    }
-}
-
 initialCards.forEach(card => {addPost(card.link, card.name);})
 
 function popupOpen(element) {
@@ -62,19 +47,39 @@ function popupClose(element) {
     element.classList.remove('popup_opened');
 }
 
-popupCloseBtn.forEach(element => {
-    element.addEventListener('click', () => {
-        popupClose(element.closest('.popup'));
-    })
-});
+function addPost(link, name) {
+    const postGrid = document.querySelector('.posts__grid');
+    const post = document.querySelector('#post').content;
+
+    if (link && name) {
+        const postElement = post.querySelector('.post').cloneNode(true);
+        postElement.querySelector('.post__img').src = link;
+        postElement.querySelector('.post__title').textContent = name;
+        postElement.querySelector('.post__img').addEventListener('click', (evt) => {
+            popupOpen(popupImage);
+            openImage(evt);
+        })
+        postElement.querySelector('.post__like').addEventListener('click', (evt) => { evt.target.classList.toggle('post__like_liked') });
+        postElement.querySelector('.post__trash').addEventListener('click', (evt) => { evt.target.closest('.post').remove() });
+        postGrid.prepend(postElement);
+    } else {
+        console.log('Поля "Название" и "Ссылка" не должны быть пустыми');
+    }
+}
+
+function openImage(evt) {
+    const bigImage = document.querySelector('.popup__big-image');
+    const figcaption = document.querySelector('.popup__figcaption');
+
+    bigImage.src = evt.target.src;
+    figcaption.textContent = evt.target.parentNode.querySelector('.post__title').textContent;
+}
 
 function editProfile() {
     popupOpen(popupEdit);
     nameInput.value = profileName.textContent;
     descriptionInput.value = profileDescription.textContent;
 }
-
-editProfileBtn.addEventListener('click', editProfile);
 
 function popupSubmit(evt) {
     evt.preventDefault();
@@ -89,9 +94,14 @@ function popupSubmit(evt) {
     popupClose(evt.target.closest('.popup'));
 }
 
-popupForm.forEach(form => {form.addEventListener('submit', popupSubmit)})  
-addPostBtn.addEventListener('click', () => {popupOpen(popupAdd)})
+editProfileBtn.addEventListener('click', editProfile);
 
+addPostBtn.addEventListener('click', () => {popupOpen(popupAdd)});
 
+popupCloseBtn.forEach(element => {
+    element.addEventListener('click', () => {
+        popupClose(element.closest('.popup'));
+    })
+});
 
-
+popupForm.forEach(form => {form.addEventListener('submit', popupSubmit)});

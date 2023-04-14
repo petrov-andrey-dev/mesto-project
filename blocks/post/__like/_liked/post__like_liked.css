@@ -1,3 +1,7 @@
 .post__like_liked {
     background-image: url(../../../../images/like-liked.svg);
 }
+.post__like_liked:hover {
+    opacity: 1;
+}
+
