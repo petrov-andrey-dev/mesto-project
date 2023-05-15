@@ -20,6 +20,14 @@
     opacity: .8;
 }
 
+.popup__submit:disabled {
+    color: #000;
+    border: 1px solid #000;
+    background-color: transparent;
+    opacity: 0.2;
+    user-select: none;
+}
+
 @media screen and (max-width: 540px) {
     .popup__submit {
         height: 46px;
