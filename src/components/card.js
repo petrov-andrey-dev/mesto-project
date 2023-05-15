@@ -1,7 +1,7 @@
 const bigImage = document.querySelector('.popup__big-image');
 const figcaption = document.querySelector('.popup__figcaption');
 const postGrid = document.querySelector('.posts__grid');
-const addPostBtn = document.querySelector('.profile__add-post');
+const btnAddPost = document.querySelector('.profile__add-post');
 const captionInput = document.querySelector('#caption');
 const linkInput = document.querySelector('#link');
 
@@ -18,10 +18,11 @@ function createPost(link, name) {
 };
 
 function openImage(evt) {
-    const parentPostTitle = evt.target.parentNode.querySelector('.post__title');
-    bigImage.src = evt.target.src;
-    bigImage.alt = parentPostTitle.textContent;
+    const title = evt.target.closest(('.post')).querySelector('.post__title');
+    const img = evt.target.querySelector('.post__img');
+    bigImage.src = img.src;
+    bigImage.alt = title.textContent;
     figcaption.textContent = parentPostTitle.textContent;
 }
 
-export {createPost, openImage, postGrid, addPostBtn, captionInput, linkInput};
+export {createPost, openImage, postGrid, btnAddPost, captionInput, linkInput};

@@ -22,6 +22,7 @@
 @import url(../blocks/posts/__grid/posts__grid.css);
 
 @import url(../blocks/post/post.css);
+@import url(../blocks/post/__open-img/post__open-img.css);
 @import url(../blocks/post/__img/post__img.css);
 @import url(../blocks/post/__trash/post__trash.css);
 @import url(../blocks/post/__title-area/post__title-area.css);

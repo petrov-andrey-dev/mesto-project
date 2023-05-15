@@ -52,9 +52,11 @@ function setEventListeners(formElement, obj) {
     });
 }
 
-export function enableValidation(obj) {
+function enableValidation(obj) {
     const formList = Array.from(document.querySelectorAll(obj.formSelector));
     formList.forEach((formElement) => {
         setEventListeners(formElement, obj);
     })
 }
+
+export { enableValidation, toggleButtonState };

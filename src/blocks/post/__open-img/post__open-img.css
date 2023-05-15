@@ -1,0 +1,25 @@
+.post__open-img {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    position: relative;
+    cursor: pointer;
+    line-height: 0;
+    
+}
+
+.post__open-img::after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    position: absolute;
+    background-color: rgba(0, 0, 0, .3);
+    transition: opacity .3s ease-in-out;
+    opacity: 0;
+}
+
+.post__open-img:hover::after {
+    opacity: 1;
+}
