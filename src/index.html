@@ -45,10 +45,10 @@
             <h2 class="popup__title">Редактировать профиль</h2>
             <form action="#" class="popup__form" name="edit_profile" method="post" novalidate>
                 <input type="text" class="popup__text-input" id="name" name="name" placeholder="Имя" minlength="2"
-                    maxlength="40" pattern="^[a-zA-Zа-яА-Я -]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required>
+                    maxlength="40" pattern="^[a-zA-Zа-яёА-ЯЁ -]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required>
                 <span class="popup__input-error name-error"></span>
                 <input type="text" class="popup__text-input" id="description" name="description" placeholder="О себе"
-                    minlength="2" maxlength="40" pattern="^[a-zA-Zа-яА-Я -]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required>
+                    minlength="2" maxlength="40" pattern="^[a-zA-Zа-яёА-ЯЁ -]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required>
                 <span class="popup__input-error description-error"></span>
                 <button class="popup__submit" type="submit" aria-label="Submit">Сохранить</button>
             </form>
@@ -60,7 +60,7 @@
             <h2 class="popup__title">Новое место</h2>
             <form action="#" class="popup__form" name="add_post" method="post" novalidate>
                 <input type="text" class="popup__text-input" id="caption" name="caption" placeholder="Название"
-                    minlength="2" maxlength="30" pattern="^[a-zA-Zа-яА-Я -]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required>
+                    minlength="2" maxlength="30" pattern="^[a-zA-Zа-яёА-ЯЁ -]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required>
                 <span class="popup__input-error caption-error"></span>
                 <input type="url" class="popup__text-input" id="link" name="link" placeholder="Ссылка" required>
                 <span class="popup__input-error link-error"></span>
@@ -72,7 +72,7 @@
         <div class="popup__container">
             <button class="popup__close" type="button" aria-label="Close"></button>
             <h2 class="popup__title">Обновить аватар</h2>
-            <form action="#" class="popup__form" name="edit_avatar" method="post">
+            <form action="#" class="popup__form" name="edit_avatar" method="post" novalidate>
                 <input type="url" class="popup__text-input" id="link-avatar" name="link-avatar" placeholder="Ссылка" required>
                 <span class="popup__input-error link-avatar-error"></span>
                 <button class="popup__submit" type="submit" aria-label="Submit">Сохранить</button>
@@ -86,6 +86,15 @@
             <figcaption class="popup__figcaption"></figcaption>
         </figure>
     </div>
+    <!-- <div class="popup popup_type_delete-post">
+        <div class="popup__container">
+            <button class="popup__close" type="button" aria-label="Close"></button>
+            <h2 class="popup__title">Вы Уверены?</h2>
+            <form action="#" class="popup__form" name="delete_post" method="delete" novalidate>
+                <button class="popup__submit" type="submit" aria-label="Submit">Да</button>
+            </form>
+        </div>
+    </div> -->
     
     <template id="post">
         <li class="post">
@@ -95,7 +104,10 @@
             </button>
             <div class="post__title-area">
                 <h2 class="post__title"></h2>
-                <button type="button" class="post__like" aria-label="Like"></button>
+                <div class="post__like-container">
+                    <button type="button" class="post__like" aria-label="Like"></button>
+                <p class="post__like-counter">1</p>
+                </div>
             </div>
         </li>
     </template>

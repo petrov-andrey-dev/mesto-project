@@ -27,7 +27,9 @@
 @import url(../blocks/post/__trash/post__trash.css);
 @import url(../blocks/post/__title-area/post__title-area.css);
 @import url(../blocks/post/__title/post__title.css);
+@import url(../blocks/post/__like-container/post__like-container.css);
 @import url(../blocks/post/__like/post__like.css);
+@import url(../blocks/post/__like-counter/post__like-counter.css);
 @import url(../blocks/post/__like/_liked/post__like_liked.css);
 
 @import url(../blocks/footer/footer.css);

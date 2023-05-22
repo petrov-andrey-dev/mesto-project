@@ -1,3 +1,6 @@
+const popupSubmits = document.querySelectorAll('.popup__submit');
+
+
 function closeByEsc(evt) {
     if (evt.key === 'Escape') {
         const openPopup = document.querySelector('.popup_opened');
@@ -5,7 +8,19 @@ function closeByEsc(evt) {
     }
 };
 
-function openPopup(element) {
+function renderSubmitBtn(isSaving) {
+    if (isSaving) {
+        popupSubmits.forEach(submitBtn => {
+            submitBtn.textContent = 'Сохранение...';
+        });
+    } else {
+        popupSubmits.forEach(submitBtn => {
+            submitBtn.textContent = 'Сохранить';
+        });
+    }
+};
+
+function openPopup(element, evt) {
     element.classList.add('popup_opened');
     document.addEventListener('keydown', closeByEsc);
 };
@@ -15,4 +30,4 @@ function closePopup(element) {
     document.removeEventListener('keydown', closeByEsc);
 };
 
-export { openPopup, closePopup };
+export { openPopup, closePopup, renderSubmitBtn };
