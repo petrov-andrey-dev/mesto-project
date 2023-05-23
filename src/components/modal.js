@@ -1,5 +1,10 @@
-const popupSubmits = document.querySelectorAll('.popup__submit');
-
+import {
+    popupEdit,
+    nameInput,
+    descriptionInput,
+    profileName,
+    profileDescription,
+} from "../index.js";
 
 function closeByEsc(evt) {
     if (evt.key === 'Escape') {
@@ -8,17 +13,13 @@ function closeByEsc(evt) {
     }
 };
 
-function renderSubmitBtn(isSaving) {
-    if (isSaving) {
-        popupSubmits.forEach(submitBtn => {
-            submitBtn.textContent = 'Сохранение...';
-        });
+function renderSubmitBtn(isLoading, button, buttonText = 'Сохранить', loadingText = 'Сохранение...') {
+    if (isLoading) {
+        button.textContent = loadingText
     } else {
-        popupSubmits.forEach(submitBtn => {
-            submitBtn.textContent = 'Сохранить';
-        });
+        button.textContent = buttonText
     }
-};
+}
 
 function openPopup(element, evt) {
     element.classList.add('popup_opened');
@@ -30,4 +31,23 @@ function closePopup(element) {
     document.removeEventListener('keydown', closeByEsc);
 };
 
-export { openPopup, closePopup, renderSubmitBtn };
+function editProfile() {
+    openPopup(popupEdit);
+    nameInput.value = profileName.textContent;
+    descriptionInput.value = profileDescription.textContent;
+};
+
+function closeByOverlay(popups) {
+    popups.forEach(item => {
+        item.addEventListener('mousedown', evt => {
+            if (evt.target.classList.contains('popup')) {
+                closePopup(evt.target);
+            } else if (evt.target.classList.contains('popup__close')) {
+                closePopup(evt.target.closest('.popup'));
+            }
+        });
+    });
+};
+
+
+export { openPopup, closePopup, renderSubmitBtn, editProfile, closeByOverlay };

@@ -1,4 +1,4 @@
-import { currentUserId } from "../index.js";
+import { userId, submitDeletePost, handlerLike, openImageHandler, handlerTrash } from "../index.js";
 
 const bigImage = document.querySelector('.popup__big-image');
 const figcaption = document.querySelector('.popup__figcaption');
@@ -21,7 +21,12 @@ function createPost(link, name, likes, ownerId, postId) {
     postElement.setAttribute('data-id', `${postId}`);
     renderLikeCounter(postElement, likes)
     if (chekCurrenUserLike(likes)) toggleLike(postLike);
-    if (ownerId !== currentUserId) postDeleteBtn.remove();
+    if (ownerId !== userId) postDeleteBtn.remove();
+
+    postDeleteBtn.addEventListener('click', handlerTrash);
+    // postDeleteBtn.addEventListener('click', evt => submitDeletePost(evt));
+    postLike.addEventListener('click', evt => handlerLike(evt));
+    postImg.addEventListener('click', evt => openImageHandler(evt));
 
     return postElement;
 };
@@ -39,7 +44,7 @@ function openImage(evt) {
 // проверка наличия лайка текущего пользователя
 function chekCurrenUserLike(likes) {
     return likes.some(like => {
-        return like._id === currentUserId;
+        return like._id === userId;
     })
 };
 
@@ -53,28 +58,7 @@ function toggleLike(postLike) {
     postLike.classList.toggle('post__like_liked');
 };
 
-// отправка запроса на установку лайка
-function putLike(postId) {
-    return fetch(`https://nomoreparties.co/v1/plus-cohort-24/cards/likes/${postId}`, {
-        method: 'PUT',
-        headers: {
-            authorization: 'e03c6a58-2a56-454c-8255-6314725b68cd'
-        }
-    })
-};
-
-// отправка запроса на удаление лайка
-function deleteLike(postId) {
-    return fetch(`https://nomoreparties.co/v1/plus-cohort-24/cards/likes/${postId}`, {
-        method: 'DELETE',
-        headers: {
-            authorization: 'e03c6a58-2a56-454c-8255-6314725b68cd'
-        }
-    })
-};
-
-
-export { createPost, openImage, chekCurrenUserLike, renderLikeCounter, toggleLike, putLike, deleteLike, postGrid, btnAddPost, captionInput, linkInput};
+export { createPost, openImage, chekCurrenUserLike, renderLikeCounter, toggleLike, postGrid, btnAddPost, captionInput, linkInput };
 
 
 

@@ -1,8 +1,9 @@
 import "./pages/index.css";
-import {  openImage, createPost, renderLikeCounter, toggleLike,  postGrid, captionInput, linkInput, btnAddPost  } from "./components/card.js";
+import { openImage, createPost, renderLikeCounter, toggleLike, postGrid, captionInput, linkInput, btnAddPost } from "./components/card.js";
 import { enableValidation } from "./components/validate.js";
-import { openPopup, closePopup, renderSubmitBtn } from './components/modal.js';
+import { openPopup, closePopup, renderSubmitBtn, editProfile, closeByOverlay } from './components/modal.js';
 import { patchAvatar, uploadPost, putLike, deleteLike, patchProfile, deletePost, getPosts, getProfile } from "./components/api.js";
+import { submitPopup } from "./components/utils.js";
 
 const btnEditAvatar = document.querySelector('.profile__edit-avatar');
 const btnEditProfile = document.querySelector('.profile__edit-info');
@@ -12,28 +13,30 @@ const nameInput = document.querySelector('#name');
 const descriptionInput = document.querySelector('#description');
 const inputLinkAvatar = document.querySelector('#link-avatar');
 const avatar = document.querySelector('.profile__avatar');
+// попапы
+const popups = document.querySelectorAll('.popup');
 const popupEdit = document.querySelector('.popup_type_edit');
-const popups = document.querySelectorAll('.popup')
 const popupAdd = document.querySelector('.popup_type_add');
 const popupImage = document.querySelector('.popup_type_image');
 const popupEditAvatar = document.querySelector('.popup_type_edit-avatar');
-// const popupDeletePost = document.querySelector('.popup_type_delete-post');
-const currentUserId = 'fbff03813343a78265557f95';
+const popupDeletePost = document.querySelector('.popup_type_delete-post');
+// кнопки сабмитов попапов
+const submitBtnEdit = popupEdit.querySelector('.popup__submit');
+const submitBtnAdd = popupAdd.querySelector('.popup__submit');
+const submitBtnEditAvatar = popupEditAvatar.querySelector('.popup__submit');
+const submitBtnDeletePost = popupDeletePost.querySelector('.popup__submit');
+
+let userId;
 let currentPost; //текущий пост
 
-// загрузка профиля
-getProfile()
-    .then(data => {
-        profileName.textContent = data.name;
-        profileDescription.textContent = data.about;
-        avatar.src = data.avatar;
-    })
-    .catch(err => console.log(err))
-
-// загрузка постов
-getPosts()
-    .then((data) => {
-        data.forEach(post => postGrid.append(createPost(post.link, post.name, post.likes, post.owner._id, post._id)));
+// начальная загрузка профиля и постов
+Promise.all([getProfile(), getPosts()])
+    .then(([userData, posts]) => {
+        userId = userData._id
+        profileName.textContent = userData.name;
+        profileDescription.textContent = userData.about;
+        avatar.src = userData.avatar;
+        posts.forEach(post => postGrid.append(createPost(post.link, post.name, post.likes, post.owner._id, post._id)));
     })
     .catch(err => console.log(err))
 
@@ -42,145 +45,122 @@ function setCurrentPost(evt) {
     return currentPost = evt.target.closest('.post');
 };
 
-function editProfile(evt) {
-    openPopup(popupEdit, evt);
-    nameInput.value = profileName.textContent;
-    descriptionInput.value = profileDescription.textContent;
-};
 
-// сброс формы после сабмита
-function submitPopup(evt) {
-    const button = evt.target.querySelector('.popup__submit');
-    closePopup(evt.target.closest('.popup'));
-    evt.target.reset();
-    button.disabled = true;
-};
+//==============Изменение аватара==============
+//листенер кнопки изменения аватара
+btnEditAvatar.addEventListener('click', () => { openPopup(popupEditAvatar) });
+
+//листенер кнопки сабмита сохранения аватара
+popupEditAvatar.addEventListener('submit', submitPopupAvatar);
 
 // Обработчик сабмита сохранения аватара
 function submitPopupAvatar(evt) {
     evt.preventDefault();
-    renderSubmitBtn(true);
+    renderSubmitBtn(true, submitBtnEditAvatar);
     patchAvatar(inputLinkAvatar.value)
         .then(data => {
             avatar.src = data.avatar;
             closePopup(evt.target.closest('.popup'));
         })
+        .then(() => submitPopup(evt))
         .catch(err => console.log(err))
-        .finally(() => renderSubmitBtn(false))
-    submitPopup(evt);
+        .finally(() => renderSubmitBtn(false, submitBtnEditAvatar))
 };
 
-// Обработчик сабмита добавления поста
+//==============Добавление поста==============
+//листенер кнопки добавления поста
+btnAddPost.addEventListener('click', () => { openPopup(popupAdd) });
+
+//листенер сабмита добаления поста
+popupAdd.addEventListener('submit', sibmitPopupAdd);
+
+//обработчик сабмита добавления поста
 function sibmitPopupAdd(evt) {
     evt.preventDefault();
-    renderSubmitBtn(true);
+    renderSubmitBtn(true, submitBtnAdd);
     uploadPost(linkInput.value, captionInput.value)
         .then(data => {
             postGrid.prepend(createPost(data.link, data.name, data.likes, data.owner._id, data._id));
         })
+        .then(() => submitPopup(evt))
         .catch(err => console.log(err))
-        .finally(() => renderSubmitBtn(false))
-    submitPopup(evt);
+        .finally(() => renderSubmitBtn(false, submitBtnAdd, 'Создать'))
 };
+
+//==============Изменение профиля==============
+//листенер кнопки изменение профиля
+btnEditProfile.addEventListener('click', editProfile);
+
+//листенер сабмита изменения профиля 
+popupEdit.addEventListener('submit', submitPopupEdit);
 
 // обработчик сабмита изменения профиля
 function submitPopupEdit(evt) {
     evt.preventDefault();
-    renderSubmitBtn(true);
+    renderSubmitBtn(true, submitBtnEdit);
     patchProfile(nameInput.value, descriptionInput.value)
         .then(data => {
             profileName.textContent = data.name;
             profileDescription.textContent = data.about;
         })
+        .then(() => submitPopup(evt))
         .catch(err => console.log(err))
-        .finally(() => renderSubmitBtn(false))
-    submitPopup(evt);
+        .finally(() => renderSubmitBtn(false, submitBtnEdit))
 };
 
-// обработчик удаления поста (без подтверждения)
+//==============Удаление поста==============
+//листенер сабмита удаления поста
+popupDeletePost.addEventListener('submit', (evt) => submitDeletePost(evt));
+
+//обработчик клика корзины
+function handlerTrash(evt) {
+    openPopup(popupDeletePost);
+    setCurrentPost(evt);
+}
+
+//обработчик сабмита удаления поста
 function submitDeletePost(evt) {
-    setCurrentPost(evt)
-    deletePost(currentPost);
-    currentPost.remove();
+    evt.preventDefault();
+    renderSubmitBtn(true, submitBtnDeletePost, 'Да', 'Удаление...');
+    deletePost(currentPost)
+        .then(() => currentPost.remove())
+        .then(() => submitPopup(evt))
+        .catch(err => console.log(err))
+        .finally(() => renderSubmitBtn(false, submitBtnDeletePost, 'Да', 'Удаление...'))
 };
-// обработчик удаления поста (с подтверждением)
-// function submitDeletePost(evt) {
-//     evt.preventDefault();
-//     evt.target.querySelector('.popup__submit').textContent = 'Да';
-//     deletePost(currentPost);
-//     currentPost.remove();
-//     submitPopup(evt);
-// };
 
-// листенер корзины
-postGrid.addEventListener('click', (evt) => {
-    if (evt.target.classList.contains('post__trash')) {
-        submitDeletePost(evt)
-    }
-});
-
+//==============Установка/снятие лайка==============
 // обработчик установки/снятия лайка
 function handlerLike(evt) {
     if (evt.target.classList.contains('post__like')) {
         setCurrentPost(evt);
         if (!evt.target.classList.contains('post__like_liked')) {
             putLike(currentPost.dataset.id)
-            .then(data => {
-                toggleLike(evt.target);
-                renderLikeCounter(currentPost, data.likes);
-            })
-            .catch(err => console.log(err))
+                .then(data => {
+                    toggleLike(evt.target);
+                    renderLikeCounter(currentPost, data.likes);
+                })
+                .catch(err => console.log(err))
         } else {
             deleteLike(currentPost.dataset.id)
-            .then(data => {
-                toggleLike(evt.target);
-                renderLikeCounter(currentPost, data.likes);
-            })
-            .catch(err => console.log(err))
+                .then(data => {
+                    toggleLike(evt.target);
+                    renderLikeCounter(currentPost, data.likes);
+                })
+                .catch(err => console.log(err))
         }
     }
-    
 }
-// листенер лайка
-postGrid.addEventListener('click', (evt) => {
-    if (evt.target.classList.contains('post__like')) {
-        handlerLike(evt);
-    }
-});
 
-btnEditProfile.addEventListener('click', editProfile);
-popupEdit.addEventListener('submit', submitPopupEdit);
-
-btnAddPost.addEventListener('click', () => { openPopup(popupAdd) });
-popupAdd.addEventListener('submit', sibmitPopupAdd);
-
-btnEditAvatar.addEventListener('click', () => { openPopup(popupEditAvatar) });
-popupEditAvatar.addEventListener('submit', submitPopupAvatar);
-
-// popupDeletePost.addEventListener('submit', submitDeletePost);
-
-popups.forEach(item => {
-    item.addEventListener('mousedown', evt => {
-        if (evt.target.classList.contains('popup')) {
-            closePopup(evt.target);
-        } else if (evt.target.classList.contains('popup__close')) {
-            closePopup(evt.target.closest('.popup'));
-        }
-    });
-});
-
+//==============Открытие картинки==============
 // обработчик открытия картинки
 function openImageHandler(evt) {
     openPopup(popupImage);
     openImage(evt);
 }
 
-// листенер открытия картинки
-postGrid.addEventListener('click', (evt) => {
-    if (evt.target.classList.contains('post__open-img')) {
-        openImageHandler(evt);
-    }
-});
+//добавление листенеров закрытия попапа по оверлею
+closeByOverlay(popups);
 
 // включение валидации форм
 enableValidation({
@@ -189,6 +169,19 @@ enableValidation({
     submitButtonSelector: '.popup__submit',
     inputErrorClass: 'popup__text-input_type_error',
     errorClass: 'popup__input-error_active'
-  });
-  
-export { currentUserId, inputLinkAvatar }
+});
+
+export {
+    userId,
+    inputLinkAvatar,
+    popupEdit,
+    nameInput,
+    descriptionInput,
+    profileName,
+    profileDescription,
+    popups,
+    submitDeletePost,
+    handlerLike,
+    openImageHandler,
+    handlerTrash
+}
