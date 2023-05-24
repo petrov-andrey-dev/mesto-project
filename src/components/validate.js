@@ -47,14 +47,14 @@ function toggleButtonState(inputList, buttonElement) {
 function setEventListeners(formElement, obj) {
     const inputList = Array.from(formElement.querySelectorAll(obj.inputSelector));
     const buttonElement = formElement.querySelector(obj.submitButtonSelector);
+    formElement.addEventListener('reset', () => {
+        disableButton(buttonElement);
+    });
     toggleButtonState(inputList, buttonElement)
     inputList.forEach((inputElement) => {
         inputElement.addEventListener('input', () => {
             checkInputValidity(formElement, inputElement, obj);
             toggleButtonState(inputList, buttonElement);
-            formElement.addEventListener('reset', () => {
-                disableButton(buttonElement);
-            })
         })
     });
 }

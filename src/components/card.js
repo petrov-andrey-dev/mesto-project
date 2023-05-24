@@ -1,4 +1,5 @@
-import { userId, submitDeletePost, handlerLike, openImageHandler, handlerTrash } from "../index.js";
+import { userId, handleLike, handleTrash } from "../index.js";
+import { handleImageOpen } from "./modal.js";
 
 const bigImage = document.querySelector('.popup__big-image');
 const figcaption = document.querySelector('.popup__figcaption');
@@ -13,7 +14,8 @@ function createPost(link, name, likes, ownerId, postId) {
     const postElement = post.querySelector('.post').cloneNode(true);
     const postImg = postElement.querySelector('.post__img');
     const postDeleteBtn = postElement.querySelector('.post__trash');
-    const postLike = postElement.querySelector('.post__like')
+    const postLike = postElement.querySelector('.post__like');
+    const postImgBtn = postElement.querySelector('.post__open-img');
 
     postImg.src = link;
     postImg.alt = name;
@@ -23,14 +25,12 @@ function createPost(link, name, likes, ownerId, postId) {
     if (chekCurrenUserLike(likes)) toggleLike(postLike);
     if (ownerId !== userId) postDeleteBtn.remove();
 
-    postDeleteBtn.addEventListener('click', handlerTrash);
-    // postDeleteBtn.addEventListener('click', evt => submitDeletePost(evt));
-    postLike.addEventListener('click', evt => handlerLike(evt));
-    postImg.addEventListener('click', evt => openImageHandler(evt));
+    postDeleteBtn.addEventListener('click', handleTrash);
+    postLike.addEventListener('click', evt => handleLike(evt));
+    postImgBtn.addEventListener('click', evt => handleImageOpen(evt));
 
     return postElement;
 };
-
 
 // открытие картинки
 function openImage(evt) {
