@@ -1,6 +1,8 @@
 import "./pages/index.css";
 import { createPost, renderLikeCounter, toggleLike, postGrid, captionInput, linkInput, btnAddPost } from "./components/card.js";
-import { enableValidation } from "./components/validate.js";
+//import { enableValidation } from "./components/validate.js";
+import { FormValidator } from "./components/validate.js";
+
 import { openPopup, editProfile, handlePopupClose, handleSubmit } from './components/modal.js';
 import { patchAvatar, uploadPost, putLike, deleteLike, patchProfile, deletePost, getPosts, getProfile } from "./components/api.js";
 
