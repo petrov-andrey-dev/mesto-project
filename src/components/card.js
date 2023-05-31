@@ -32,6 +32,53 @@ function createPost(link, name, likes, ownerId, postId) {
     return postElement;
 };
 
+class Post {
+    constructor(data, selector) {
+        this._link = data.link;
+        this._name = data.name;
+        this._likes = data.likes;
+        this._owner = data.owner;
+        this._id = data._id;
+        this._selector = selector;
+    }
+    _getElement() {
+        const postElement = document
+            .querySelector(this._selector)
+            .content.querySelector(".post")
+            .cloneNode(true);
+        return postElement;
+    }
+    _setEventListeners() {
+        this._deleteButton.addEventListener('click', handleTrash);
+        this._likeButton.addEventListener('click', evt => handleLike(evt));
+        this._postImgBtn.addEventListener('click', evt => handleImageOpen(evt));
+    }
+
+    _renderLikeCounter() {
+        this._element.querySelector('.post__like-counter').textContent = this._likes.length;
+    }
+
+    generateCard() {
+        this._element = this._getElement();
+        this._img = this._element.querySelector(".post__img");
+        this._imgName = this._element.querySelector(".post__title");
+        this._imgName.textContent = this._name;
+        this._likeButton = this._element.querySelector(".post__like");
+        this._deleteButton = this._element.querySelector(".post__trash");
+        this._postImgBtn = this._element.querySelector(".post__open-img");
+        this._img.alt = this._name;
+        this._img.src = this._link;
+        
+        this._element.setAttribute('data-id', `${this._id}`);
+        this._setEventListeners();
+        this._renderLikeCounter();
+
+        //(тут вызывать методы дальнейшие еще)
+
+        return this._element;
+    }
+}
+
 // открытие картинки
 function openImage(evt) {
     const title = evt.target.closest(('.post')).querySelector('.post__title');
@@ -58,7 +105,7 @@ function toggleLike(postLike) {
     postLike.classList.toggle('post__like_liked');
 };
 
-export { createPost, openImage, chekCurrenUserLike, renderLikeCounter, toggleLike, postGrid, btnAddPost, captionInput, linkInput };
+export { Post, createPost, openImage, chekCurrenUserLike, renderLikeCounter, toggleLike, postGrid, btnAddPost, captionInput, linkInput };
 
 
 

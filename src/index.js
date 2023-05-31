@@ -1,5 +1,5 @@
 import "./pages/index.css";
-import { createPost, renderLikeCounter, toggleLike, postGrid, captionInput, linkInput, btnAddPost } from "./components/card.js";
+import { Post, createPost, renderLikeCounter, toggleLike, postGrid, captionInput, linkInput, btnAddPost } from "./components/card.js";
 import { enableValidation } from "./components/validate.js";
 import { openPopup, editProfile, handlePopupClose, handleSubmit } from './components/modal.js';
 import { patchAvatar, uploadPost, putLike, deleteLike, patchProfile, deletePost, getPosts, getProfile } from "./components/api.js";
@@ -31,12 +31,17 @@ Promise.all([getProfile(), getPosts()])
         profileDescription.textContent = userData.about;
         avatar.src = userData.avatar;
         posts.forEach(post => postGrid.append(createPost(post.link, post.name, post.likes, post.owner._id, post._id)));
+        const test = new Post(posts[0], '#post');
+        console.log(test.generateCard());
+        postGrid.prepend(test.generateCard());
     })
     .catch(err => console.log(err))
 
 // Установка текущего поста
 function setCurrentPost(evt) {
-    return currentPost = evt.target.closest('.post');
+    currentPost = evt.target.closest('.post');
+    console.log(currentPost);
+    return currentPost;
 };
 
 //==============Изменение аватара==============
@@ -158,3 +163,16 @@ export {
     handleLike,
     handleTrash
 }
+
+// class Aplusb {
+//     constructor(a, b) {
+//         this.a = a;
+//         this.b = b;
+//     }
+//     multiply() {
+//         return this.a + this.b;
+//     }
+// }
+
+// const abc = new Aplusb(2, 4);
+// console.log(abc.multiply());
