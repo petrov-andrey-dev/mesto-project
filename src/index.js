@@ -1,6 +1,6 @@
 import "./pages/index.css";
 import { Post, createPost, renderLikeCounter, toggleLike, postGrid, captionInput, linkInput, btnAddPost } from "./components/card.js";
-import { enableValidation } from "./components/validate.js";
+import { FormValidator } from "./components/validate.js";
 import { openPopup, editProfile, handlePopupClose, handleSubmit } from './components/modal.js';
 import { patchAvatar, uploadPost, putLike, deleteLike, patchProfile, deletePost, getPosts, getProfile } from "./components/api.js";
 
@@ -141,13 +141,23 @@ function handleLike(evt) {
 handlePopupClose(popups);
 
 // включение валидации форм
-enableValidation({
+const validationSettings = {
     formSelector: '.popup__form',
     inputSelector: '.popup__text-input',
     submitButtonSelector: '.popup__submit',
     inputErrorClass: 'popup__text-input_type_error',
     errorClass: 'popup__input-error_active'
-});
+};
+
+//создаем объекты классов для валидации форм
+const validatorEditProfile = new FormValidator(validationSettings, popupEdit);
+const validatorAddCard = new FormValidator(validationSettings, popupAdd);
+const validatorEditAvatar = new FormValidator(validationSettings, popupEditAvatar);
+
+validatorEditProfile.enableValidation();
+validatorAddCard.enableValidation();
+validatorEditAvatar.enableValidation();
+
 
 export {
     userId,
@@ -164,15 +174,3 @@ export {
     handleTrash
 }
 
-// class Aplusb {
-//     constructor(a, b) {
-//         this.a = a;
-//         this.b = b;
-//     }
-//     multiply() {
-//         return this.a + this.b;
-//     }
-// }
-
-// const abc = new Aplusb(2, 4);
-// console.log(abc.multiply());
