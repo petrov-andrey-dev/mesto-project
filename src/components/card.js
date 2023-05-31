@@ -45,7 +45,7 @@ export default class Post {
         this._postImgBtn = this._element.querySelector(".post__open-img");
         this._img.alt = this._name;
         this._img.src = this._link;
-        
+
         this._element.setAttribute('data-id', `${this._id}`);
         this._setEventListeners();
         this._renderLikeCounter();
@@ -57,7 +57,7 @@ export default class Post {
 }
 
 
-    //методы
+//методы
 
 //-------------------------------------------------------------------------------
 function createPost(link, name, likes, ownerId, postId) {
@@ -111,17 +111,17 @@ function toggleLike(postLike) {
     postLike.classList.toggle("post__like_liked");
 }
 
-export {
-    createPost,
-    openImage,
-    chekCurrenUserLike,
-    renderLikeCounter,
-    toggleLike,
-    postGrid,
-    btnAddPost,
-    captionInput,
-    linkInput,
-};
+// export {
+//     createPost,
+//     openImage,
+//     chekCurrenUserLike,
+//     renderLikeCounter,
+//     toggleLike,
+//     postGrid,
+//     btnAddPost,
+//     captionInput,
+//     linkInput,
+// };
 
 export { Post, createPost, openImage, chekCurrenUserLike, renderLikeCounter, toggleLike, postGrid, btnAddPost, captionInput, linkInput };
 
