@@ -6,7 +6,7 @@ import {
     profileDescription,
     popupImage
 } from "../index.js";
-import { openImage } from "./card.js";
+// import { openImage } from "./card.js";
 
 // закрытие попапа по Escape
 function closeByEsc(evt) {
@@ -58,10 +58,10 @@ function handlePopupClose(popups) {
 };
 
 // обработчик открытия картинки
-function handleImageOpen(evt) {
-    openPopup(popupImage);
-    openImage(evt);
-};
+// function handleImageOpen(evt) {
+//     openPopup(popupImage);
+//     openImage(evt);
+// };
 
 // универсальный обработчик сабмита
 function handleSubmit(request, evt, loadingText = "Сохранение...") {
@@ -82,4 +82,6 @@ function handleSubmit(request, evt, loadingText = "Сохранение...") {
         });
 };
 
-export { openPopup, closePopup, renderSubmitBtn, editProfile, handlePopupClose, handleImageOpen, handleSubmit };
+export { openPopup, closePopup, renderSubmitBtn, editProfile, handlePopupClose, 
+    // handleImageOpen, 
+    handleSubmit };

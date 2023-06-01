@@ -56,6 +56,7 @@ function patchProfile(name, description) {
 
 // отправка запроса на удаление поста
 function deletePost(currentPost) {
+    console.log(currentPost);
     return request(`/cards/${currentPost.dataset.id}`, {
         method: 'DELETE',
         headers: config.headers

@@ -1,5 +1,5 @@
 import "./pages/index.css";
-import { Post, createPost, renderLikeCounter, toggleLike, postGrid, captionInput, linkInput, btnAddPost } from "./components/card.js";
+import { Post, postGrid, captionInput, linkInput, btnAddPost } from "./components/card.js";
 import { FormValidator } from "./components/validate.js";
 import { openPopup, editProfile, handlePopupClose, handleSubmit } from './components/modal.js';
 import { patchAvatar, uploadPost, putLike, deleteLike, patchProfile, deletePost, getPosts, getProfile } from "./components/api.js";
@@ -30,18 +30,16 @@ Promise.all([getProfile(), getPosts()])
         profileName.textContent = userData.name;
         profileDescription.textContent = userData.about;
         avatar.src = userData.avatar;
-        posts.forEach(post => postGrid.append(createPost(post.link, post.name, post.likes, post.owner._id, post._id)));
-        const test = new Post(posts[0], '#post');
-        console.log(test.generateCard());
-        postGrid.prepend(test.generateCard());
+        posts.forEach(post => {
+            const postObj = new Post(post, '#post');
+            postGrid.append(postObj.generateCard());
+        })
     })
     .catch(err => console.log(err))
 
 // Установка текущего поста
 function setCurrentPost(evt) {
-    currentPost = evt.target.closest('.post');
-    console.log(currentPost);
-    return currentPost;
+    return currentPost = evt.target.closest('.post');
 };
 
 //==============Изменение аватара==============
@@ -70,7 +68,8 @@ function sibmitPopupAdd(evt) {
     function makeUploadPost() {
         return uploadPost(linkInput.value, captionInput.value)
             .then(data => {
-                postGrid.prepend(createPost(data.link, data.name, data.likes, data.owner._id, data._id));
+                const postObj = new Post(data, '#post');
+                postGrid.prepend(postObj.generateCard());
             })
     };
     handleSubmit(makeUploadPost, evt);
@@ -107,34 +106,12 @@ function handleTrash(evt) {
 
 //обработчик сабмита удаления поста
 function submitDeletePost(evt) {
+    console.log(currentPost);
     function makeDeletePost() {
         return deletePost(currentPost)
             .then(() => currentPost.remove())
     }
     handleSubmit(makeDeletePost, evt, 'Удаление...');
-};
-
-//==============Установка/снятие лайка==============
-// обработчик установки/снятия лайка
-function handleLike(evt) {
-    if (evt.target.classList.contains('post__like')) {
-        setCurrentPost(evt);
-        if (!evt.target.classList.contains('post__like_liked')) {
-            putLike(currentPost.dataset.id)
-                .then(data => {
-                    toggleLike(evt.target);
-                    renderLikeCounter(currentPost, data.likes);
-                })
-                .catch(err => console.log(err))
-        } else {
-            deleteLike(currentPost.dataset.id)
-                .then(data => {
-                    toggleLike(evt.target);
-                    renderLikeCounter(currentPost, data.likes);
-                })
-                .catch(err => console.log(err))
-        }
-    }
 };
 
 //добавление листенеров закрытия попапа по оверлею
@@ -169,8 +146,9 @@ export {
     profileDescription,
     popups,
     popupImage,
+    popupDeletePost,
     submitDeletePost,
-    handleLike,
+    setCurrentPost,
     handleTrash
 }
 
