@@ -1,96 +1,91 @@
-const config = {
-    baseUrl: 'https://nomoreparties.co/v1/plus-cohort-24',
-    headers: {
-        authorization: 'e03c6a58-2a56-454c-8255-6314725b68cd',
-        'Content-Type': 'application/json'
+export default class Api {
+    constructor(config) {
+        this._baseUrl = config.baseUrl;
+        this._headers = config.headers;
     }
-};
+    // проверка ответа
+    _checkResult(res) {
+        if (res.ok) {
+            return res.json();
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+    };
 
-// проверка ответа
-function checkResult(res) {
-    if (res.ok) {
-        return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-};
+    // универсальная функция соправки запроса и проверки ответа
+    _request(url, options) {
+        return fetch(`${this._baseUrl}${url}`, options).then(this._checkResult)
+    };
 
-// универсальная функция соправки запроса и проверки ответа
-function request(url, options) {
-    return fetch(`${config.baseUrl}${url}`, options).then(checkResult)
-};
-
-// отправка запроса на изменение аватара
-function patchAvatar(src) {
-    return request(`/users/me/avatar`, {
-        method: 'PATCH',
-        headers: config.headers,
-        body: JSON.stringify({
-            avatar: src
+    // отправка запроса на изменение аватара
+    patchAvatar(src) {
+        return this._request(`/users/me/avatar`, {
+            method: 'PATCH',
+            headers: this._headers,
+            body: JSON.stringify({
+                avatar: src
+            })
         })
-    })
-};
+    };
 
-// отправка запроса на добавление поста
-function uploadPost(link, name) {
-    return request(`/cards`, {
-        method: 'POST',
-        headers: config.headers,
-        body: JSON.stringify({
-            name: name,
-            link: link
+    // отправка запроса на добавление поста
+    uploadPost(link, name) {
+        return this._request(`/cards`, {
+            method: 'POST',
+            headers: this._headers,
+            body: JSON.stringify({
+                name: name,
+                link: link
+            })
         })
-    })
-};
+    };
 
-// отправка запроса на изменение профиля
-function patchProfile(name, description) {
-    return request(`/users/me`, {
-        method: 'PATCH',
-        headers: config.headers,
-        body: JSON.stringify({
-            name: name,
-            about: description
+    // отправка запроса на изменение профиля
+    patchProfile(name, description) {
+        return this._request(`/users/me`, {
+            method: 'PATCH',
+            headers: this._headers,
+            body: JSON.stringify({
+                name: name,
+                about: description
+            })
         })
-    })
-};
+    };
 
-// отправка запроса на удаление поста
-function deletePost(currentPost) {
-    console.log(currentPost);
-    return request(`/cards/${currentPost.dataset.id}`, {
-        method: 'DELETE',
-        headers: config.headers
-    })
-};
+    // отправка запроса на удаление поста
+    deletePost(currentPost) {
+        return this._request(`/cards/${currentPost.dataset.id}`, {
+            method: 'DELETE',
+            headers: this._headers
+        })
+    };
 
-// запрос на получение постов
-function getPosts() {
-    return request(`/cards`, {
-        headers: config.headers
-    })
-};
+    // запрос на получение постов
+    getPosts() {
+        return this._request(`/cards`, {
+            headers: this._headers
+        })
+    };
 
-// запрос на получение данных профиля
-function getProfile() {
-    return request(`/users/me`, {
-        headers: config.headers
-    })
-};
+    // запрос на получение данных профиля
+    getProfile() {
+        return this._request(`/users/me`, {
+            headers: this._headers
+        })
+    };
 
-// отправка запроса на установку лайка
-function putLike(postId) {
-    return request(`/cards/likes/${postId}`, {
-        method: 'PUT',
-        headers: config.headers
-    })
-};
+    // отправка запроса на установку лайка
+    putLike(postId) {
+        return this._request(`/cards/likes/${postId}`, {
+            method: 'PUT',
+            headers: this._headers
+        })
+    };
 
-// отправка запроса на удаление лайка
-function deleteLike(postId) {
-    return request(`/cards/likes/${postId}`, {
-        method: 'DELETE',
-        headers: config.headers
-    })
-};
-
-export { patchAvatar, uploadPost, patchProfile, deletePost, getPosts, getProfile, putLike, deleteLike }
+    // отправка запроса на удаление лайка
+    deleteLike(postId) {
+        return this._request(`/cards/likes/${postId}`, {
+            method: 'DELETE',
+            headers: this._headers
+        })
+    };
+}

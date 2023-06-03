@@ -1,12 +1,12 @@
 import {
     userId,
     handleTrash,
-    popupImage
+    popupImage,
+    api
 } from "../index.js";
 import {
     openPopup
 } from "./modal.js";
-import { putLike, deleteLike } from "./api.js";
 
 const bigImage = document.querySelector(".popup__big-image");
 const figcaption = document.querySelector(".popup__figcaption");
@@ -56,14 +56,14 @@ export default class Post {
     // обработчик события клика по лайку
     _handleLike() {
         if (!this._likeButton.classList.contains('post__like_liked')) {
-            putLike(this._id)
+            api.putLike(this._id)
                 .then(() => {
                     this._toggleLike();
                     this._renderLikeCounter();
                 })
                 .catch(err => console.log(err))
         } else {
-            deleteLike(this._id)
+            api.deleteLike(this._id)
                 .then(() => {
                     this._toggleLike();
                     this._renderLikeCounter();

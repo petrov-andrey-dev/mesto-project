@@ -2,7 +2,7 @@ import "./pages/index.css";
 import { Post, postGrid, captionInput, linkInput, btnAddPost } from "./components/card.js";
 import { FormValidator } from "./components/validate.js";
 import { openPopup, editProfile, handlePopupClose, handleSubmit } from './components/modal.js';
-import { patchAvatar, uploadPost, putLike, deleteLike, patchProfile, deletePost, getPosts, getProfile } from "./components/api.js";
+import Api from "./components/api.js";
 
 const btnEditAvatar = document.querySelector('.profile__edit-avatar');
 const btnEditProfile = document.querySelector('.profile__edit-info');
@@ -23,8 +23,18 @@ const popupDeletePost = document.querySelector('.popup_type_delete-post');
 let userId; //текущий userID
 let currentPost; //текущий пост
 
+const config = {
+    baseUrl: 'https://nomoreparties.co/v1/plus-cohort-24',
+    headers: {
+        authorization: 'e03c6a58-2a56-454c-8255-6314725b68cd',
+        'Content-Type': 'application/json'
+    }
+};
+
+const api = new Api(config);
+
 // начальная загрузка профиля и постов
-Promise.all([getProfile(), getPosts()])
+Promise.all([api.getProfile(), api.getPosts()])
     .then(([userData, posts]) => {
         userId = userData._id
         profileName.textContent = userData.name;
@@ -51,7 +61,7 @@ popupEditAvatar.addEventListener('submit', submitPopupAvatar);
 
 function submitPopupAvatar(evt) {
     function makePatchAvatar() {
-        return patchAvatar(inputLinkAvatar.value).then(data => avatar.src = data.avatar);
+        return api.patchAvatar(inputLinkAvatar.value).then(data => avatar.src = data.avatar);
     }
     handleSubmit(makePatchAvatar, evt);
 };
@@ -66,7 +76,7 @@ popupAdd.addEventListener('submit', sibmitPopupAdd);
 //обработчик сабмита добавления поста
 function sibmitPopupAdd(evt) {
     function makeUploadPost() {
-        return uploadPost(linkInput.value, captionInput.value)
+        return api.uploadPost(linkInput.value, captionInput.value)
             .then(data => {
                 const postObj = new Post(data, '#post');
                 postGrid.prepend(postObj.generateCard());
@@ -85,7 +95,7 @@ popupEdit.addEventListener('submit', submitPopupEdit);
 // обработчик сабмита изменения профиля
 function submitPopupEdit(evt) {
     function makePatchProfile() {
-        return patchProfile(nameInput.value, descriptionInput.value)
+        return api.patchProfile(nameInput.value, descriptionInput.value)
             .then(data => {
                 profileName.textContent = data.name;
                 profileDescription.textContent = data.about;
@@ -108,7 +118,7 @@ function handleTrash(evt) {
 function submitDeletePost(evt) {
     console.log(currentPost);
     function makeDeletePost() {
-        return deletePost(currentPost)
+        return api.deletePost(currentPost)
             .then(() => currentPost.remove())
     }
     handleSubmit(makeDeletePost, evt, 'Удаление...');
@@ -138,6 +148,7 @@ validatorEditAvatar.enableValidation();
 
 export {
     userId,
+    api,
     inputLinkAvatar,
     popupEdit,
     nameInput,
