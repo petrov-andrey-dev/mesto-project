@@ -1,5 +1,5 @@
 import "./pages/index.css";
-import { Post, postGrid, captionInput, linkInput, btnAddPost } from "./components/card.js";
+import { Post, postGrid, captionInput, linkInput, btnAddPost } from "./components/Card.js";
 import { FormValidator } from "./components/validate.js";
 //import {openPopup, editProfile, handlePopupClose, handleSubmit } from './components/modal.js';
 import Api from "./components/api.js";
@@ -132,28 +132,67 @@ function submitPopupEdit(evt) {
 popupDeletePost.addEventListener('submit', (evt) => submitDeletePost(evt));
 
 //обработчик клика корзины
-function handleTrash(evt) {
+function handleTrash(element, button) {
     openPopup(popupDeletePost);
-    setCurrentPost(evt);
+    setCurrentPost(element);
 }
 
 //обработчик сабмита удаления поста
-function submitDeletePost(evt) {
-    console.log(currentPost);
+function submitDeletePost(button) {
     function makeDeletePost() {
         return api.deletePost(currentPost)
             .then(() => currentPost.remove())
     }
-    handleSubmit(makeDeletePost, evt, 'Удаление...');
+    handleSubmit(makeDeletePost, button, 'Удаление...');
 };
+//=========================================================
+
 
 function renderPost({ data, position = 'append'}) {
-    const newPost = new Post(data, '#post').generateCard();
+    const newPost = new Post({ data, handleLike, handleImageOpen, handleTrash }, '#post').generateCard();
     postSection.addItem(newPost, position);
 }
 
 //добавление листенеров закрытия попапа по оверлею
 //handlePopupClose(popups);
+
+//==============Установка/снятие лайка==============
+// обработчик установки/снятия лайка
+function handleLike(element, button) {
+    if (button.classList.contains('post__like')) {
+        // setCurrentPost(element);
+        if (!button.classList.contains('post__like_liked')) {
+            api.putLike(element.dataset.id)
+                .then(data => {
+                    toggleLike(button);
+                    renderLikeCounter(element, data.likes);
+                })
+                .catch(err => console.log(err))
+        } else {
+            api.deleteLike(element.dataset.id)
+                .then(data => {
+                    toggleLike(button);
+                    renderLikeCounter(element, data.likes);
+                })
+                .catch(err => console.log(err))
+        }
+    }
+};
+
+function renderLikeCounter(postElement, likes) {
+    postElement.querySelector(".post__like-counter").textContent = likes.length;
+}
+
+function toggleLike(postLike) {
+    postLike.classList.toggle("post__like_liked");
+}
+//============================================================
+
+// обработчик открытия картинки
+function handleImageOpen(evt) {
+    openPopup(popupImage);
+    openImage(evt);
+};
 
 // включение валидации форм
 const validationSettings = {

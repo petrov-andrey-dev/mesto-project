@@ -17,12 +17,15 @@ const linkInput = document.querySelector("#link");
 
 // ----> ООП создание поста<-----------------------------------------------------------
 export default class Post {
-    constructor(data, selector) {
+    constructor({ data, handleLike, handleImageOpen, handleTrash }, selector) {
         this._link = data.link;
         this._name = data.name;
         this._likes = data.likes;
         this._owner = data.owner;
         this._id = data._id;
+        this._handleLike = handleLike;
+        this._handleOpen = handleImageOpen;
+        this._handleTrash = handleTrash;
         this._selector = selector;
     }
     // копирование темплейта поста
@@ -35,8 +38,8 @@ export default class Post {
     }
     // установка слушателей на элементы поста
     _setEventListeners() {
-        this._deleteButton.addEventListener('click', handleTrash);
-        this._likeButton.addEventListener('click', () => this._handleLike());
+        this._deleteButton.addEventListener('click', () => this._handleTrash(this._element, this._deleteButton));
+        this._likeButton.addEventListener('click', () => this._handleLike(this._element, this._likeButton));
         // this._postImgBtn.addEventListener('click', () => this._handleImageOpen());
     }
     // отрисовка кол-ва лайков
@@ -53,30 +56,7 @@ export default class Post {
     _toggleLike() {
         this._likeButton.classList.toggle("post__like_liked");
     }
-    // обработчик события клика по лайку
-    _handleLike() {
-        if (!this._likeButton.classList.contains('post__like_liked')) {
-            api.putLike(this._id)
-                .then(() => {
-                    this._toggleLike();
-                    this._renderLikeCounter();
-                })
-                .catch(err => console.log(err))
-        } else {
-            api.deleteLike(this._id)
-                .then(() => {
-                    this._toggleLike();
-                    this._renderLikeCounter();
-                })
-                .catch(err => console.log(err))
-        }
-    };
-    // обработчик события клика по картинке
-    // _handleImageOpen() {
-    //     openPopup(popupImage);
-    //     this._openImage();
-    // }
-    // открытие попапа картинки
+    
     _openImage() {
         bigImage.src = this._img.src;
         bigImage.alt = this._imgName.textContent;
