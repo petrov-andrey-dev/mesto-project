@@ -1,8 +1,12 @@
 import "./pages/index.css";
 import { Post, postGrid, captionInput, linkInput, btnAddPost } from "./components/card.js";
 import { FormValidator } from "./components/validate.js";
-import { openPopup, editProfile, handlePopupClose, handleSubmit } from './components/modal.js';
+//import {openPopup, editProfile, handlePopupClose, handleSubmit } from './components/modal.js';
 import Api from "./components/api.js";
+import { PopupWithForm } from "./components/popupWithForm";
+import { PopupWithImage } from "./components/PopupWithImage";
+import { UserInfo } from "./components/UserInfo";
+
 
 const btnEditAvatar = document.querySelector('.profile__edit-avatar');
 const btnEditProfile = document.querySelector('.profile__edit-info');
@@ -32,6 +36,19 @@ const config = {
 };
 
 const api = new Api(config);
+//-------------->ООП UserInfo <---------------------
+//создаем объект класса для получения информации из полей 
+// const userInfo = new UserInfo('.profile__name', '.profile__description', '.profile__avatar');
+// console.log (userInfo)
+
+
+const profilePopup = new PopupWithForm('.popup_type_edit', submitPopupEdit);
+const cardPopup = new PopupWithForm('.popup_type_add', sibmitPopupAdd);
+const avatarPopup = new PopupWithForm('.popup_type_edit-avatar', submitPopupAvatar);
+//console.log(profilePopup);
+
+
+
 
 // начальная загрузка профиля и постов
 Promise.all([api.getProfile(), api.getPosts()])
@@ -86,11 +103,13 @@ function sibmitPopupAdd(evt) {
 };
 
 //==============Изменение профиля==============
+
+
 //листенер кнопки изменение профиля
-btnEditProfile.addEventListener('click', editProfile);
+//btnEditProfile.addEventListener('click', editProfile);
 
 //листенер сабмита изменения профиля 
-popupEdit.addEventListener('submit', submitPopupEdit);
+//popupEdit.addEventListener('submit', submitPopupEdit);
 
 // обработчик сабмита изменения профиля
 function submitPopupEdit(evt) {
@@ -125,7 +144,7 @@ function submitDeletePost(evt) {
 };
 
 //добавление листенеров закрытия попапа по оверлею
-handlePopupClose(popups);
+//handlePopupClose(popups);
 
 // включение валидации форм
 const validationSettings = {
