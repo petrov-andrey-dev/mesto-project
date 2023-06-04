@@ -4,9 +4,9 @@ import {
     popupImage,
     api
 } from "../index.js";
-import {
-    openPopup
-} from "./modal.js";
+// import {
+//     openPopup
+// } from "./modal.js";
 
 const bigImage = document.querySelector(".popup__big-image");
 const figcaption = document.querySelector(".popup__figcaption");
@@ -37,7 +37,7 @@ export default class Post {
     _setEventListeners() {
         this._deleteButton.addEventListener('click', handleTrash);
         this._likeButton.addEventListener('click', () => this._handleLike());
-        this._postImgBtn.addEventListener('click', () => this._handleImageOpen());
+        // this._postImgBtn.addEventListener('click', () => this._handleImageOpen());
     }
     // отрисовка кол-ва лайков
     _renderLikeCounter() {
@@ -72,10 +72,10 @@ export default class Post {
         }
     };
     // обработчик события клика по картинке
-    _handleImageOpen() {
-        openPopup(popupImage);
-        this._openImage();
-    }
+    // _handleImageOpen() {
+    //     openPopup(popupImage);
+    //     this._openImage();
+    // }
     // открытие попапа картинки
     _openImage() {
         bigImage.src = this._img.src;
@@ -159,9 +159,9 @@ export default class Post {
 
 export {
     Post,
-    postGrid, 
-    btnAddPost, 
-    captionInput, 
+    postGrid,
+    btnAddPost,
+    captionInput,
     linkInput
 };
 
