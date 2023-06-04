@@ -6,6 +6,7 @@ import Api from "./components/api.js";
 import { PopupWithForm } from "./components/popupWithForm";
 import { PopupWithImage } from "./components/PopupWithImage";
 import { UserInfo } from "./components/UserInfo";
+import Section from "./components/Section";
 
 
 const btnEditAvatar = document.querySelector('.profile__edit-avatar');
@@ -41,6 +42,7 @@ const api = new Api(config);
 // const userInfo = new UserInfo('.profile__name', '.profile__description', '.profile__avatar');
 // console.log (userInfo)
 
+const postSection = new Section(renderPost, postGrid);
 
 const profilePopup = new PopupWithForm('.popup_type_edit', submitPopupEdit);
 const cardPopup = new PopupWithForm('.popup_type_add', sibmitPopupAdd);
@@ -57,10 +59,11 @@ Promise.all([api.getProfile(), api.getPosts()])
         profileName.textContent = userData.name;
         profileDescription.textContent = userData.about;
         avatar.src = userData.avatar;
-        posts.forEach(post => {
-            const postObj = new Post(post, '#post');
-            postGrid.append(postObj.generateCard());
-        })
+        postSection.renderItems(posts);
+        // posts.forEach(post => {
+        //     const postObj = new Post(post, '#post');
+        //     postGrid.append(postObj.generateCard());
+        // })
     })
     .catch(err => console.log(err))
 
@@ -116,8 +119,9 @@ function submitPopupEdit(evt) {
     function makePatchProfile() {
         return api.patchProfile(nameInput.value, descriptionInput.value)
             .then(data => {
-                profileName.textContent = data.name;
-                profileDescription.textContent = data.about;
+                renderPost({ data, position: 'prepend'})
+                // profileName.textContent = data.name;
+                // profileDescription.textContent = data.about;
             })
     }
     handleSubmit(makePatchProfile, evt);
@@ -142,6 +146,11 @@ function submitDeletePost(evt) {
     }
     handleSubmit(makeDeletePost, evt, 'Удаление...');
 };
+
+function renderPost({ data, position = 'append'}) {
+    const newPost = new Post(data, '#post').generateCard();
+    postSection.addItem(newPost, position);
+}
 
 //добавление листенеров закрытия попапа по оверлею
 //handlePopupClose(popups);
