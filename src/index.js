@@ -52,6 +52,7 @@ const avatarPopup = new PopupWithForm('.popup_type_edit-avatar', submitPopupAvat
 const confirmPopup = new PopupConfirm('.popup_type_delete-post', submitDeletePost)
 confirmPopup.setEventListeners();
 addPostPopup.setEventListeners();
+avatarPopup.setEventListeners();
 
 
 
@@ -73,16 +74,15 @@ function setCurrentPost(evt) {
 
 //==============Изменение аватара==============
 //листенер кнопки изменения аватара
-btnEditAvatar.addEventListener('click', () => { openPopup(popupEditAvatar) });
+btnEditAvatar.addEventListener('click', () => { avatarPopup.open() });
 
-//листенер кнопки сабмита сохранения аватара
-popupEditAvatar.addEventListener('submit', submitPopupAvatar);
 
 function submitPopupAvatar(evt) {
     function makePatchAvatar() {
-        return api.patchAvatar(inputLinkAvatar.value).then(data => avatar.src = data.avatar);
+        return api.patchAvatar(inputLinkAvatar.value)
+        .then(data => avatar.src = data.avatar);
     }
-    handleSubmit(makePatchAvatar, evt);
+    handleSubmit(makePatchAvatar, evt, avatarPopup);
 };
 
 //==============Добавление поста==============
