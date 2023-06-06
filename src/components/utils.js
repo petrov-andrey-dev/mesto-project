@@ -1,15 +1,14 @@
 // утилитарные функции, которые используются в работе сразу нескольких других функций
-import {confirmPopup} from "../index.js";
 
 // универсальный обработчик сабмита
-export function handleSubmit(request, evt, loadingText = "Сохранение...") {
+export function handleSubmit(request, evt,objPopup, loadingText = "Сохранение...") {
     evt.preventDefault();
     const submitButton = evt.submitter;
     const initialText = submitButton.textContent;
     renderSubmitBtn(true, submitButton, initialText, loadingText);
     request()
         .then(() => {
-            confirmPopup.close();
+            objPopup.close();
             evt.target.reset();
         })
         .catch((err) => {

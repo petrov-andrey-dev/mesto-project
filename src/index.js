@@ -1,9 +1,8 @@
 import "./pages/index.css";
 import { Post, postGrid, captionInput, linkInput, btnAddPost } from "./components/Card.js";
 import { FormValidator } from "./components/validate.js";
-//import {openPopup, editProfile, handlePopupClose, handleSubmit } from './components/modal.js';
 import Api from "./components/api.js";
-import { PopupWithForm } from "./components/popupWithForm";
+import { PopupWithForm } from "./components/PopupWithForm";
 import { PopupWithImage } from "./components/PopupWithImage";
 import { UserInfo } from "./components/UserInfo";
 import PopupConfirm from "./components/PopupConfirm";
@@ -47,12 +46,12 @@ const api = new Api(config);
 const postSection = new Section(renderPost, postGrid);
 
 const profilePopup = new PopupWithForm('.popup_type_edit', submitPopupEdit);
-const cardPopup = new PopupWithForm('.popup_type_add', sibmitPopupAdd);
+const addPostPopup = new PopupWithForm('.popup_type_add', sibmitPopupAdd);
 const avatarPopup = new PopupWithForm('.popup_type_edit-avatar', submitPopupAvatar);
+
 const confirmPopup = new PopupConfirm('.popup_type_delete-post', submitDeletePost)
 confirmPopup.setEventListeners();
-//console.log(profilePopup);
-
+addPostPopup.setEventListeners();
 
 
 
@@ -64,10 +63,6 @@ Promise.all([api.getProfile(), api.getPosts()])
         profileDescription.textContent = userData.about;
         avatar.src = userData.avatar;
         postSection.renderItems(posts);
-        // posts.forEach(post => {
-        //     const postObj = new Post(post, '#post');
-        //     postGrid.append(postObj.generateCard());
-        // })
     })
     .catch(err => console.log(err))
 
@@ -92,21 +87,18 @@ function submitPopupAvatar(evt) {
 
 //==============Добавление поста==============
 //листенер кнопки добавления поста
-btnAddPost.addEventListener('click', () => { openPopup(popupAdd) });
-
-//листенер сабмита добаления поста
-popupAdd.addEventListener('submit', sibmitPopupAdd);
+btnAddPost.addEventListener('click', () => { addPostPopup.open()});
 
 //обработчик сабмита добавления поста
-function sibmitPopupAdd(evt) {
+function sibmitPopupAdd(evt,{link,caption}) {
     function makeUploadPost() {
-        return api.uploadPost(linkInput.value, captionInput.value)
+        return api.uploadPost( link, caption)
             .then(data => {
-                const postObj = new Post(data, '#post');
-                postGrid.prepend(postObj.generateCard());
+                const postObj = new Post({ data, handleLike, handleImageOpen, handleTrash }, '#post');
+                postSection.addItem(postObj.generateCard(),'prepend');
             })
     };
-    handleSubmit(makeUploadPost, evt);
+    handleSubmit(makeUploadPost, evt,addPostPopup);
 };
 
 //==============Изменение профиля==============
@@ -151,7 +143,7 @@ function submitDeletePost(post, evt) {
         return api.deletePost(post)
             .then(() => confirmPopup.post.deletePost())
     }
-    handleSubmit(makeDeletePost, evt, 'Удаление...');
+    handleSubmit(makeDeletePost, evt, confirmPopup, 'Удаление...');
 };
 //=========================================================
 
@@ -220,7 +212,6 @@ validatorEditProfile.enableValidation();
 validatorAddCard.enableValidation();
 validatorEditAvatar.enableValidation();
 
-api.uploadPost('https://images.unsplash.com/photo-1685059352125-077b37ca6743?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80', 'uchuhc');
 
 export {
     userId,
