@@ -52,8 +52,8 @@ export default class Api {
     };
 
     // отправка запроса на удаление поста
-    deletePost(currentPost) {
-        return this._request(`/cards/${currentPost.dataset.id}`, {
+    deletePost(post) {
+        return this._request(`/cards/${post.id}`, {
             method: 'DELETE',
             headers: this._headers
         })

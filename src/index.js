@@ -6,7 +6,9 @@ import Api from "./components/api.js";
 import { PopupWithForm } from "./components/popupWithForm";
 import { PopupWithImage } from "./components/PopupWithImage";
 import { UserInfo } from "./components/UserInfo";
+import PopupConfirm from "./components/PopupConfirm";
 import Section from "./components/Section";
+import {handleSubmit} from "./components/utils"
 
 
 const btnEditAvatar = document.querySelector('.profile__edit-avatar');
@@ -47,6 +49,8 @@ const postSection = new Section(renderPost, postGrid);
 const profilePopup = new PopupWithForm('.popup_type_edit', submitPopupEdit);
 const cardPopup = new PopupWithForm('.popup_type_add', sibmitPopupAdd);
 const avatarPopup = new PopupWithForm('.popup_type_edit-avatar', submitPopupAvatar);
+const confirmPopup = new PopupConfirm('.popup_type_delete-post', submitDeletePost)
+confirmPopup.setEventListeners();
 //console.log(profilePopup);
 
 
@@ -129,21 +133,25 @@ function submitPopupEdit(evt) {
 
 //==============Удаление поста==============
 //листенер сабмита удаления поста
-popupDeletePost.addEventListener('submit', (evt) => submitDeletePost(evt));
+// popupDeletePost.addEventListener('submit', (evt) => submitDeletePost(evt));
 
 //обработчик клика корзины
-function handleTrash(element, button) {
-    openPopup(popupDeletePost);
-    setCurrentPost(element);
+function handleTrash(post) {
+    confirmPopup.open();
+    confirmPopup.getPost(post);
 }
+// function handleTrash(element, button) {
+//     openPopup(popupDeletePost);
+//     setCurrentPost(element);
+// }
 
 //обработчик сабмита удаления поста
-function submitDeletePost(button) {
+function submitDeletePost(post, evt) {
     function makeDeletePost() {
-        return api.deletePost(currentPost)
-            .then(() => currentPost.remove())
+        return api.deletePost(post)
+            .then(() => confirmPopup.post.deletePost())
     }
-    handleSubmit(makeDeletePost, button, 'Удаление...');
+    handleSubmit(makeDeletePost, evt, 'Удаление...');
 };
 //=========================================================
 
@@ -212,6 +220,7 @@ validatorEditProfile.enableValidation();
 validatorAddCard.enableValidation();
 validatorEditAvatar.enableValidation();
 
+api.uploadPost('https://images.unsplash.com/photo-1685059352125-077b37ca6743?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80', 'uchuhc');
 
 export {
     userId,
@@ -227,6 +236,7 @@ export {
     popupDeletePost,
     submitDeletePost,
     setCurrentPost,
-    handleTrash
+    handleTrash,
+    confirmPopup
 }
 

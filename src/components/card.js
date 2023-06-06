@@ -22,7 +22,7 @@ export default class Post {
         this._name = data.name;
         this._likes = data.likes;
         this._owner = data.owner;
-        this._id = data._id;
+        this.id = data._id;
         this._handleLike = handleLike;
         this._handleOpen = handleImageOpen;
         this._handleTrash = handleTrash;
@@ -38,21 +38,21 @@ export default class Post {
     }
     // установка слушателей на элементы поста
     _setEventListeners() {
-        this._deleteButton.addEventListener('click', () => this._handleTrash(this._element, this._deleteButton));
+        this._deleteButton.addEventListener('click', () => this._handleTrash(this));
         this._likeButton.addEventListener('click', () => this._handleLike(this._element, this._likeButton));
         // this._postImgBtn.addEventListener('click', () => this._handleImageOpen());
     }
-    // отрисовка кол-ва лайков
+    // отрисовка кол-ва лайков+
     _renderLikeCounter() {
         this._element.querySelector('.post__like-counter').textContent = this._likes.length;
     }
-    // проверка лайка текущего пользователя
+    // проверка лайка текущего пользователя+
     _checkCurrentUserLike() {
         return this._likes.some(like => {
             return like._id === userId;
         })
     }
-    // переключение стиля лайка
+    // переключение стиля лайка+
     _toggleLike() {
         this._likeButton.classList.toggle("post__like_liked");
     }
@@ -61,6 +61,10 @@ export default class Post {
         bigImage.src = this._img.src;
         bigImage.alt = this._imgName.textContent;
         figcaption.textContent = this._imgName.textContent;
+    }
+
+    deletePost() {
+        this._element.remove();
     }
     // возврат готового элемента карточки
     generateCard() {
@@ -75,7 +79,7 @@ export default class Post {
         this._img.alt = this._name;
         this._img.src = this._link;
 
-        this._element.setAttribute('data-id', `${this._id}`);
+        this._element.setAttribute('data-id', `${this.id}`);
         this._setEventListeners();
         this._renderLikeCounter();
 

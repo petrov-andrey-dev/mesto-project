@@ -40,6 +40,7 @@ export default class Popup {
             this.close();
         }
     };
+    
     // function handlePopupClose(popups) {
     //     popups.forEach(item => {
     //         item.addEventListener('mousedown', evt => {
@@ -108,24 +109,7 @@ export default class Popup {
 //     openImage(evt);
 // };
 
-// универсальный обработчик сабмита
-// function handleSubmit(request, evt, loadingText = "Сохранение...") {
-//     evt.preventDefault();
-//     const submitButton = evt.submitter;
-//     const initialText = submitButton.textContent;
-//     renderSubmitBtn(true, submitButton, initialText, loadingText);
-//     request()
-//         .then(() => {
-//             closePopup(evt.target.closest('.popup'));
-//             evt.target.reset();
-//         })
-//         .catch((err) => {
-//             console.error(`Ошибка: ${err}`);
-//         })
-//         .finally(() => {
-//             renderSubmitBtn(false, submitButton, initialText);
-//         });
-// };
+
 
 //export {
 //openPopup, closePopup, renderSubmitBtn, editProfile, handlePopupClose,
