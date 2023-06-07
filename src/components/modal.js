@@ -23,7 +23,7 @@ export default class Popup {
         document.removeEventListener("keydown", this._handleEscClose);
     }
     //   закрытие попапа клавишей Esc
-    _handleEscClose(evt) {
+    _handleEscClose=(evt) =>{
         if (evt.key === "Escape") {
             this.close();
         }
@@ -32,26 +32,13 @@ export default class Popup {
     setEventListeners() {
         this._popup.addEventListener("mousedown", () => this._handlePopupClose());
     }
-    _handlePopupClose() {
-        if (
-            this._popup.classList.contains("popup") ||
-            this._popup.classList.contains("popup__close")
-        ) {
-            this.close();
-        }
-    };
-    
-    // function handlePopupClose(popups) {
-    //     popups.forEach(item => {
-    //         item.addEventListener('mousedown', evt => {
-    //             if (evt.target.classList.contains('popup')) {
-    //                 closePopup(evt.target);
-    //             } else if (evt.target.classList.contains('popup__close')) {
-    //                 closePopup(evt.target.closest('.popup'));
-    //             }
-    //         });
-    //     });
-    // };
+    _handlePopupClose=(evt)=> {
+        this._popup.addEventListener("click", (evt) => {
+            if (evt.target.classList.contains("popup_opened")) {
+              this.close();
+            }
+        })
+}
 }
 
 // закрытие попапа по Escape
