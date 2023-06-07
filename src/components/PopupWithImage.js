@@ -8,10 +8,10 @@ export class PopupWithImage extends Popup {
     }
 
     //открытие попапа c изображением
-    open(name, link) {
-        this._popupImg.src = link;
-        this._popupImg.alt = name;
-        this._popupViewTitle.textContent = name;
+    open(data) {
+        this._popupImg.src = data.link;
+        this._popupImg.alt = data.name;
+        this._popupViewTitle.textContent = data.name;
         super.open();
     }
 }

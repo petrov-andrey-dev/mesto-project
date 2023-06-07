@@ -1,5 +1,6 @@
 import "./pages/index.css";
-import { Post, postGrid, captionInput, linkInput, btnAddPost } from "./components/Card.js";
+// import { Post, postGrid, captionInput, linkInput, btnAddPost } from "./components/Card.js";
+import Post from "./components/Card.js";
 import { FormValidator } from "./components/validate.js";
 import Api from "./components/api.js";
 import { PopupWithForm } from "./components/PopupWithForm";
@@ -25,6 +26,10 @@ const popupAdd = document.querySelector('.popup_type_add');
 const popupImage = document.querySelector('.popup_type_image');
 const popupEditAvatar = document.querySelector('.popup_type_edit-avatar');
 const popupDeletePost = document.querySelector('.popup_type_delete-post');
+const postGrid = document.querySelector(".posts__grid");
+const btnAddPost = document.querySelector(".profile__add-post");
+const captionInput = document.querySelector("#caption");
+const linkInput = document.querySelector("#link");
 // переменные
 let userId; //текущий userID
 let currentPost; //текущий пост
@@ -48,14 +53,13 @@ const postSection = new Section(renderPost, postGrid);
 const profilePopup = new PopupWithForm('.popup_type_edit', submitPopupEdit);
 const addPostPopup = new PopupWithForm('.popup_type_add', sibmitPopupAdd);
 const avatarPopup = new PopupWithForm('.popup_type_edit-avatar', submitPopupAvatar);
+const imagePopup = new PopupWithImage('.popup_type_image');
 
 const confirmPopup = new PopupConfirm('.popup_type_delete-post', submitDeletePost)
 confirmPopup.setEventListeners();
 addPostPopup.setEventListeners();
 avatarPopup.setEventListeners();
-
-
-
+imagePopup.setEventListeners();
 // начальная загрузка профиля и постов
 Promise.all([api.getProfile(), api.getPosts()])
     .then(([userData, posts]) => {
@@ -124,18 +128,11 @@ function submitPopupEdit(evt) {
 };
 
 //==============Удаление поста==============
-//листенер сабмита удаления поста
-// popupDeletePost.addEventListener('submit', (evt) => submitDeletePost(evt));
-
 //обработчик клика корзины
 function handleTrash(post) {
     confirmPopup.open();
     confirmPopup.getPost(post);
 }
-// function handleTrash(element, button) {
-//     openPopup(popupDeletePost);
-//     setCurrentPost(element);
-// }
 
 //обработчик сабмита удаления поста
 function submitDeletePost(post, evt) {
@@ -153,45 +150,33 @@ function renderPost({ data, position = 'append'}) {
     postSection.addItem(newPost, position);
 }
 
-//добавление листенеров закрытия попапа по оверлею
-//handlePopupClose(popups);
 
 //==============Установка/снятие лайка==============
 // обработчик установки/снятия лайка
-function handleLike(element, button) {
-    if (button.classList.contains('post__like')) {
-        // setCurrentPost(element);
-        if (!button.classList.contains('post__like_liked')) {
-            api.putLike(element.dataset.id)
+function handleLike(post) {
+        if (!post.checkCurrentUserLike()) {
+            api.putLike(post)
                 .then(data => {
-                    toggleLike(button);
-                    renderLikeCounter(element, data.likes);
+                    post.likes = data.likes;
+                    post.toggleLike();
+                    post.renderLikeCounter();
                 })
                 .catch(err => console.log(err))
         } else {
-            api.deleteLike(element.dataset.id)
+            api.deleteLike(post)
                 .then(data => {
-                    toggleLike(button);
-                    renderLikeCounter(element, data.likes);
+                    post.likes = data.likes;
+                    post.toggleLike();
+                    post.renderLikeCounter();
                 })
                 .catch(err => console.log(err))
-        }
     }
 };
-
-function renderLikeCounter(postElement, likes) {
-    postElement.querySelector(".post__like-counter").textContent = likes.length;
-}
-
-function toggleLike(postLike) {
-    postLike.classList.toggle("post__like_liked");
-}
 //============================================================
 
 // обработчик открытия картинки
-function handleImageOpen(evt) {
-    openPopup(popupImage);
-    openImage(evt);
+function handleImageOpen(post) {
+    imagePopup.open(post);
 };
 
 // включение валидации форм

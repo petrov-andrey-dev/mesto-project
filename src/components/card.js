@@ -1,26 +1,17 @@
 import {
     userId,
-    handleTrash,
-    popupImage,
-    api
 } from "../index.js";
-// import {
-//     openPopup
-// } from "./modal.js";
 
 const bigImage = document.querySelector(".popup__big-image");
 const figcaption = document.querySelector(".popup__figcaption");
-const postGrid = document.querySelector(".posts__grid");
-const btnAddPost = document.querySelector(".profile__add-post");
-const captionInput = document.querySelector("#caption");
-const linkInput = document.querySelector("#link");
+
 
 // ----> ООП создание поста<-----------------------------------------------------------
 export default class Post {
     constructor({ data, handleLike, handleImageOpen, handleTrash }, selector) {
-        this._link = data.link;
-        this._name = data.name;
-        this._likes = data.likes;
+        this.link = data.link;
+        this.name = data.name;
+        this.likes = data.likes;
         this._owner = data.owner;
         this.id = data._id;
         this._handleLike = handleLike;
@@ -39,21 +30,21 @@ export default class Post {
     // установка слушателей на элементы поста
     _setEventListeners() {
         this._deleteButton.addEventListener('click', () => this._handleTrash(this));
-        this._likeButton.addEventListener('click', () => this._handleLike(this._element, this._likeButton));
-        // this._postImgBtn.addEventListener('click', () => this._handleImageOpen());
+        this._likeButton.addEventListener('click', () => this._handleLike(this));
+        this._postImgBtn.addEventListener('click', () => this._handleOpen(this));
     }
     // отрисовка кол-ва лайков+
-    _renderLikeCounter() {
-        this._element.querySelector('.post__like-counter').textContent = this._likes.length;
+    renderLikeCounter() {
+        this._element.querySelector('.post__like-counter').textContent = this.likes.length;
     }
     // проверка лайка текущего пользователя+
-    _checkCurrentUserLike() {
-        return this._likes.some(like => {
+    checkCurrentUserLike() {
+        return this.likes.some(like => {
             return like._id === userId;
         })
     }
     // переключение стиля лайка+
-    _toggleLike() {
+    toggleLike() {
         this._likeButton.classList.toggle("post__like_liked");
     }
     
@@ -75,78 +66,19 @@ export default class Post {
         this._deleteButton = this._element.querySelector(".post__trash");
         this._postImgBtn = this._element.querySelector(".post__open-img");
 
-        this._imgName.textContent = this._name;
-        this._img.alt = this._name;
-        this._img.src = this._link;
+        this._imgName.textContent = this.name;
+        this._img.alt = this.name;
+        this._img.src = this.link;
 
         this._element.setAttribute('data-id', `${this.id}`);
         this._setEventListeners();
-        this._renderLikeCounter();
+        this.renderLikeCounter();
 
-        if (this._checkCurrentUserLike()) this._toggleLike();
+        if (this.checkCurrentUserLike()) this.toggleLike();
         if (this._owner._id !== userId) this._deleteButton.remove();
 
         return this._element;
     }
-}
-
-//-------------------------------------------------------------------------------
-// function createPost(link, name, likes, ownerId, postId) {
-//     const post = document.querySelector("#post").content;
-//     const postElement = post.querySelector(".post").cloneNode(true);
-//     const postImg = postElement.querySelector(".post__img");
-//     const postDeleteBtn = postElement.querySelector(".post__trash");
-//     const postLike = postElement.querySelector(".post__like");
-//     const postImgBtn = postElement.querySelector(".post__open-img");
-
-//     postImg.src = link;
-//     postImg.alt = name;
-//     postElement.querySelector(".post__title").textContent = name;
-
-//     postElement.setAttribute("data-id", `${postId}`);
-//     renderLikeCounter(postElement, likes);
-//     if (chekCurrenUserLike(likes)) toggleLike(postLike);
-//     if (ownerId !== userId) postDeleteBtn.remove();
-
-//     postDeleteBtn.addEventListener("click", handleTrash);
-//     postLike.addEventListener("click", (evt) => handleLike(evt));
-//     postImgBtn.addEventListener("click", (evt) => handleImageOpen(evt));
-
-//     return postElement;
-// };
-
-// открытие картинки
-// function openImage(evt) {
-//     const title = evt.target.closest(".post").querySelector(".post__title");
-//     const img = evt.target.querySelector(".post__img");
-//     bigImage.src = img.src;
-//     bigImage.alt = title.textContent;
-//     figcaption.textContent = title.textContent;
-// }
-
-// проверка наличия лайка текущего пользователя
-// function chekCurrenUserLike(likes) {
-//     return likes.some((like) => {
-//         return like._id === userId;
-//     });
-// }
-
-// отрисовка количества лайков
-// function renderLikeCounter(postElement, likes) {
-//     postElement.querySelector(".post__like-counter").textContent = likes.length;
-// }
-
-// простановка/снятие лайка
-// function toggleLike(postLike) {
-//     postLike.classList.toggle("post__like_liked");
-// }
-
-export {
-    Post,
-    postGrid,
-    btnAddPost,
-    captionInput,
-    linkInput
 };
 
 

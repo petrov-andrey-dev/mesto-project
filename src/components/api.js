@@ -74,16 +74,16 @@ export default class Api {
     };
 
     // отправка запроса на установку лайка
-    putLike(postId) {
-        return this._request(`/cards/likes/${postId}`, {
+    putLike(post) {
+        return this._request(`/cards/likes/${post.id}`, {
             method: 'PUT',
             headers: this._headers
         })
     };
 
     // отправка запроса на удаление лайка
-    deleteLike(postId) {
-        return this._request(`/cards/likes/${postId}`, {
+    deleteLike(post) {
+        return this._request(`/cards/likes/${post.id}`, {
             method: 'DELETE',
             headers: this._headers
         })
