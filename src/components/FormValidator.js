@@ -1,6 +1,6 @@
 //--------------------> ООП валидация <-----------------------
 
-export class FormValidator {
+export default class FormValidator {
     constructor(validationSettings, formElement) {
         this._formElement = formElement;
 

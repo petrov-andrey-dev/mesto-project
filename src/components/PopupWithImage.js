@@ -1,10 +1,11 @@
-import Popup from "./modal";
+import Popup from "./Popup";
 
-export class PopupWithImage extends Popup {
+//Попап с картинкой
+export default class PopupWithImage extends Popup {
     constructor(popupSelector) {
         super(popupSelector);
-        this._popupImg = this._popup.querySelector(".popup__big-image");
-        this._popupViewTitle = this._popup.querySelector(".popup__figcaption");
+        this._popupImg = this.popup.querySelector(".popup__big-image");
+        this._popupViewTitle = this.popup.querySelector(".popup__figcaption");
     }
 
     //открытие попапа c изображением

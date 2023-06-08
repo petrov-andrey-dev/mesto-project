@@ -1,7 +1,7 @@
 // утилитарные функции, которые используются в работе сразу нескольких других функций
 
 // универсальный обработчик сабмита
-export function handleSubmit(request, evt,objPopup, loadingText = "Сохранение...") {
+export function handleSubmit(request, evt, objPopup, loadingText = "Сохранение...") {
     evt.preventDefault();
     const submitButton = evt.submitter;
     const initialText = submitButton.textContent;

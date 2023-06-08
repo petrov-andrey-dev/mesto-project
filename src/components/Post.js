@@ -1,10 +1,10 @@
 import {
     userId,
 } from "../index.js";
-
-const bigImage = document.querySelector(".popup__big-image");
-const figcaption = document.querySelector(".popup__figcaption");
-
+import {
+    bigImage,
+    figcaption
+} from '../utils/constants.js'
 
 // ----> ООП создание поста<-----------------------------------------------------------
 export default class Post {

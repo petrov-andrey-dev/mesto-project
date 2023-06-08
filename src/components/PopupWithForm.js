@@ -1,10 +1,12 @@
-import Popup from "./modal.js";
+import Popup from "./Popup.js";
 
-export class PopupWithForm extends Popup {
+
+//Попап с формой
+export default class PopupWithForm extends Popup {
     constructor(popupSelector, handleFormSubmit) {
         super(popupSelector);
-        this._form = this._popup.querySelector(".popup__form");
-        this._inputList = this._popup.querySelectorAll(".popup__text-input");
+        this._form = this.popup.querySelector(".popup__form");
+        this._inputList = this.popup.querySelectorAll(".popup__text-input");
         this._handleFormSubmit = handleFormSubmit;
         this._popupButton = this._form.querySelector(".popup__submit");
         this._popupButtonTextContent = this._popupButton.textContent;
@@ -20,7 +22,7 @@ export class PopupWithForm extends Popup {
     //добавляем обработчик сабмита формы к стандартному методу
     setEventListeners() {
         super.setEventListeners();
-        this._popup.addEventListener("submit", (evt) => {
+        this.popup.addEventListener("submit", (evt) => {
             this._handleFormSubmit(evt,this._getInputValues());
         });
     }
