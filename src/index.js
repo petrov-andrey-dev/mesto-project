@@ -32,7 +32,7 @@ const api = new Api(config);
 
 //-------------->ООП UserInfo <---------------------
 //создаем объект класса для получения информации из полей 
-// const userInfo = new UserInfo('.profile__name', '.profile__description', '.profile__avatar');
+ const userInfo = new UserInfo('.profile__name', '.profile__description', '.profile__avatar');
 // console.log (userInfo)
 
 //Инициализация класса Section
@@ -91,25 +91,29 @@ function sibmitPopupAdd(evt,{link,caption}) {
 };
 
 //==============Изменение профиля==============
-
-
 //листенер кнопки изменение профиля
-//btnEditProfile.addEventListener('click', editProfile);
+btnEditProfile.addEventListener('click', () => {  handleEditProfile()});
 
+function handleEditProfile (){
+   const data = userInfo.getUserInfo();
+   nameInput.value = data.name;
+   descriptionInput.value = data.about;
+   profilePopup.open()
+   
+};
 //листенер сабмита изменения профиля 
-//popupEdit.addEventListener('submit', submitPopupEdit);
+profilePopup.setEventListeners();
 
 // обработчик сабмита изменения профиля
-function submitPopupEdit(evt) {
+function submitPopupEdit(evt,info) {
+ 
     function makePatchProfile() {
-        return api.patchProfile(nameInput.value, descriptionInput.value)
+        return api.patchProfile(info.name, info.description)
             .then(data => {
-                renderPost({ data, position: 'prepend'})
-                // profileName.textContent = data.name;
-                // profileDescription.textContent = data.about;
+                userInfo.setUserInfo(data);
             })
     }
-    handleSubmit(makePatchProfile, evt);
+    handleSubmit(makePatchProfile, evt, profilePopup);
 };
 
 //==============Удаление поста==============
