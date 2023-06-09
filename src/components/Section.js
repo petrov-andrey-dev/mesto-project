@@ -18,7 +18,7 @@ export default class Section {
     } 
 
     renderItems(items) {
-        items.forEach(item => this._renderer({ data: item, position: 'prepend'}))
+        items.reverse().forEach(item => this._renderer({ data: item, position: 'prepend'}))
     }
 }
 

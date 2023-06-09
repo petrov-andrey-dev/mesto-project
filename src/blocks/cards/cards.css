@@ -1,10 +1,10 @@
-.posts {
+.cards {
     width: 100%;
     padding-top: 51px;
 }
 
 @media screen and (max-width: 540px) {
-    .posts {
+    .cards {
         padding-top: 36px;
     }
 }

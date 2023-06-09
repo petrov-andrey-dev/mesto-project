@@ -28,7 +28,7 @@ export default class Api {
     };
 
     // отправка запроса на добавление поста
-    uploadPost(link, name) {
+    uploadCard(link, name) {
         return this._request(`/cards`, {
             method: 'POST',
             headers: this._headers,
@@ -52,15 +52,15 @@ export default class Api {
     };
 
     // отправка запроса на удаление поста
-    deletePost(post) {
-        return this._request(`/cards/${post.id}`, {
+    deleteCard(card) {
+        return this._request(`/cards/${card.id}`, {
             method: 'DELETE',
             headers: this._headers
         })
     };
 
     // запрос на получение постов
-    getPosts() {
+    getCards() {
         return this._request(`/cards`, {
             headers: this._headers
         })
@@ -74,16 +74,16 @@ export default class Api {
     };
 
     // отправка запроса на установку лайка
-    putLike(post) {
-        return this._request(`/cards/likes/${post.id}`, {
+    putLike(card) {
+        return this._request(`/cards/likes/${card.id}`, {
             method: 'PUT',
             headers: this._headers
         })
     };
 
     // отправка запроса на удаление лайка
-    deleteLike(post) {
-        return this._request(`/cards/likes/${post.id}`, {
+    deleteLike(card) {
+        return this._request(`/cards/likes/${card.id}`, {
             method: 'DELETE',
             headers: this._headers
         })

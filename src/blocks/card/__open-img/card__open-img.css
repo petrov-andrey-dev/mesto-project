@@ -1,4 +1,4 @@
-.post__open-img {
+.card__open-img {
     border: 0;
     padding: 0;
     background: transparent;
@@ -8,7 +8,7 @@
     
 }
 
-.post__open-img::after {
+.card__open-img::after {
     content: '';
     width: 100%;
     height: 100%;
@@ -20,6 +20,6 @@
     opacity: 0;
 }
 
-.post__open-img:hover::after {
+.card__open-img:hover::after {
     opacity: 1;
 }

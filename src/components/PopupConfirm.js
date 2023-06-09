@@ -2,17 +2,17 @@ import Popup from "./Popup";
 
 //Попап подтверждения действя
 export default class PopupConfirm extends Popup {
-    constructor(popupSelector, submitDeletePost) {
+    constructor(popupSelector, handleConfirm) {
         super(popupSelector);
-        this._submitDeletePost = submitDeletePost;
+        this._handleConfirm = handleConfirm;
         this._button = this.popup.querySelector('.popup__submit');
     }
 
-    getPost(post) {
-        this.post = post;
+    getCard(card) {
+        this.card = card;
     }
     setEventListeners() {
         super.setEventListeners();
-        this.popup.addEventListener('submit', (evt) => this._submitDeletePost(this.post, evt))
+        this.popup.addEventListener('submit', (evt) => this._handleConfirm(this.card, evt))
     }
 }

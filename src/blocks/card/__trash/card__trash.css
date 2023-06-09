@@ -1,4 +1,4 @@
-.post__trash {
+.card__trash {
     width: 18px;
     height: 19px;
     padding: 0;
@@ -15,6 +15,6 @@
     cursor: pointer;
 }
 
-.post__trash:hover {
+.card__trash:hover {
     opacity: .6;
 }

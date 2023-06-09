@@ -27,10 +27,10 @@
                 </div>
                 <p class="profile__description">Исследователь океана</p>
             </div>
-            <button class="profile__add-post" type="button" aria-label="Add post"></button>
+            <button class="profile__add-card" type="button" aria-label="Add card"></button>
         </section>
-        <section class="posts">
-            <ul class="posts__grid">
+        <section class="cards">
+            <ul class="cards__grid">
                 <!-- Грид с постами -->
             </ul>
         </section>
@@ -58,7 +58,7 @@
         <div class="popup__container">
             <button class="popup__close" type="button" aria-label="Close"></button>
             <h2 class="popup__title">Новое место</h2>
-            <form action="#" class="popup__form" name="add_post" method="post" novalidate>
+            <form action="#" class="popup__form" name="add_card" method="post" novalidate>
                 <input type="text" class="popup__text-input" id="caption" name="caption" placeholder="Название"
                     minlength="2" maxlength="30" pattern="^[a-zA-Zа-яёА-ЯЁ -]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required>
                 <span class="popup__input-error caption-error"></span>
@@ -86,27 +86,27 @@
             <figcaption class="popup__figcaption"></figcaption>
         </figure>
     </div>
-    <div class="popup popup_type_delete-post">
+    <div class="popup popup_type_delete-card">
         <div class="popup__container">
             <button class="popup__close" type="button" aria-label="Close"></button>
             <h2 class="popup__title">Вы Уверены?</h2>
-            <form action="#" class="popup__form-without-inputs" name="delete_post" method="delete" novalidate>
+            <form action="#" class="popup__form-without-inputs" name="delete_card" method="delete" novalidate>
                 <button class="popup__submit" type="submit" aria-label="Submit">Да</button>
             </form>
         </div>
     </div>
     
-    <template id="post">
-        <li class="post">
-            <button type="button" class="post__open-img">
-                <img src="#" alt="#" class="post__img">
-                <button type="button" class="post__trash" aria-label="trash"></button>
+    <template id="card">
+        <li class="card">
+            <button type="button" class="card__open-img">
+                <img src="#" alt="#" class="card__img">
+                <button type="button" class="card__trash" aria-label="trash"></button>
             </button>
-            <div class="post__title-area">
-                <h2 class="post__title"></h2>
-                <div class="post__like-container">
-                    <button type="button" class="post__like" aria-label="Like"></button>
-                    <p class="post__like-counter"></p>
+            <div class="card__title-area">
+                <h2 class="card__title"></h2>
+                <div class="card__like-container">
+                    <button type="button" class="card__like" aria-label="Like"></button>
+                    <p class="card__like-counter"></p>
                 </div>
             </div>
         </li>

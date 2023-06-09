@@ -1,4 +1,4 @@
-.post__like {
+.card__like {
     width: 22px;
     height: 19px;
     padding: 0;
@@ -12,6 +12,6 @@
     transition: .2s;
 }
 
-.post__like:hover {
+.card__like:hover {
     opacity: .5;
 }
