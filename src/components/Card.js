@@ -1,18 +1,11 @@
-import {
-    userId,
-} from "../pages/index.js";
-import {
-    bigImage,
-    figcaption
-} from '../utils/constants.js'
-
 // ----> ООП создание поста<-----------------------------------------------------------
 export default class Card {
-    constructor({ data, handleLike, handleImageOpen, handleTrash }, selector) {
+    constructor(data, userId, handleLike, handleImageOpen, handleTrash, selector) {
         this.link = data.link;
         this.name = data.name;
         this.likes = data.likes;
         this._owner = data.owner;
+        this._userId = userId;
         this.id = data._id;
         this._handleLike = handleLike;
         this._handleOpen = handleImageOpen;
@@ -35,23 +28,17 @@ export default class Card {
     }
     // отрисовка кол-ва лайков+
     renderLikeCounter() {
-        this._element.querySelector('.card__like-counter').textContent = this.likes.length;
+        this._likeCounter.textContent = this.likes.length;
     }
     // проверка лайка текущего пользователя+
     checkCurrentUserLike() {
         return this.likes.some(like => {
-            return like._id === userId;
+            return like._id === this._userId;
         })
     }
     // переключение стиля лайка+
     toggleLike() {
         this._likeButton.classList.toggle("card__like_liked");
-    }
-    
-    _openImage() {
-        bigImage.src = this._img.src;
-        bigImage.alt = this._imgName.textContent;
-        figcaption.textContent = this._imgName.textContent;
     }
 
     deleteCard() {
@@ -60,6 +47,7 @@ export default class Card {
     // возврат готового элемента карточки
     generateCard() {
         this._element = this._getElement();
+        this._likeCounter = this._element.querySelector('.card__like-counter')
         this._img = this._element.querySelector(".card__img");
         this._imgName = this._element.querySelector(".card__title");
         this._likeButton = this._element.querySelector(".card__like");
@@ -75,7 +63,7 @@ export default class Card {
         this.renderLikeCounter();
 
         if (this.checkCurrentUserLike()) this.toggleLike();
-        if (this._owner._id !== userId) this._deleteButton.remove();
+        if (this._owner._id !== this._userId) this._deleteButton.remove();
 
         return this._element;
     }

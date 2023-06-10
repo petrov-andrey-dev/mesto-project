@@ -6,17 +6,13 @@ import {
     btnEditAvatar,
     btnEditProfile,
     btnAddCard,
-    profileName,
-    profileDescription,
     nameInput,
     descriptionInput,
-    inputLinkAvatar,
-    avatar,
     cardGrid
 } from '../utils/constants';
-import Card from "../components/card";
+import Card from "../components/Card";
+import Api from "../components/api";
 import FormValidator from "../components/FormValidator";
-import Api from "../components/Api";
 import PopupWithForm from "../components/PopupWithForm";
 import PopupWithImage from "../components/PopupWithImage";
 import UserInfo from "../components/UserInfo";
@@ -38,8 +34,6 @@ const api = new Api(config);
 //Инициализация класса Section
 const cardSection = new Section(renderCard, cardGrid);
 
-
-
 //Создание объектов Popup
 const profilePopup = new PopupWithForm(popupSelectors.popupTypeEdit, submitPopupEdit);
 const addCardPopup = new PopupWithForm(popupSelectors.popupTypeAdd, sibmitPopupAdd);
@@ -56,10 +50,9 @@ imagePopup.setEventListeners();
 //Начальная загрузка профиля и постов
 Promise.all([api.getProfile(), api.getCards()])
     .then(([userData, cards]) => {
-        userId = userData._id
-        profileName.textContent = userData.name;
-        profileDescription.textContent = userData.about;
-        avatar.src = userData.avatar;
+        userInfo.setUserInfo(userData);
+        userInfo.renderUserInfo();
+        userInfo.renderAvatar();
         cardSection.renderItems(cards);
     })
     .catch(err => console.log(err))
@@ -68,10 +61,13 @@ Promise.all([api.getProfile(), api.getCards()])
 //листенер кнопки изменения аватара
 btnEditAvatar.addEventListener('click', () => { avatarPopup.open() });
 
-function submitPopupAvatar(evt) {
+function submitPopupAvatar(evt, {avatar} ) {
     function makePatchAvatar() {
-        return api.patchAvatar(inputLinkAvatar.value)
-        .then(data => avatar.src = data.avatar);
+        return api.patchAvatar(avatar)
+        .then(data => {
+            userInfo.setUserInfo({avatar: data.avatar})
+            userInfo.renderAvatar();
+        });
     }
     handleSubmit(makePatchAvatar, evt, avatarPopup);
 };
@@ -94,7 +90,7 @@ function sibmitPopupAdd(evt,{link,caption}) {
 //листенер кнопки изменение профиля
 btnEditProfile.addEventListener('click', () => {  handleEditProfile()});
 
-function handleEditProfile (){
+function handleEditProfile() {
    const data = userInfo.getUserInfo();
    nameInput.value = data.name;
    descriptionInput.value = data.about;
@@ -105,12 +101,12 @@ function handleEditProfile (){
 profilePopup.setEventListeners();
 
 // обработчик сабмита изменения профиля
-function submitPopupEdit(evt,info) {
- 
+function submitPopupEdit(evt, {name, description}) {
     function makePatchProfile() {
-        return api.patchProfile(info.name, info.description)
+        return api.patchProfile(name, description)
             .then(data => {
-                userInfo.setUserInfo(data);
+                userInfo.setUserInfo({name: data.name, about: data.about});
+                userInfo.renderUserInfo();
             })
     }
     handleSubmit(makePatchProfile, evt, profilePopup);
@@ -139,7 +135,7 @@ function submitDeleteCard(card, evt) {
 
 //Создание объекта поста и добаление его на страницу
 function renderCard({ data, position }) {
-    const newCard = new Card({ data, handleLike, handleImageOpen, handleTrash }, '#card').generateCard();
+    const newCard = new Card(data, userInfo.userId, handleLike, handleImageOpen, handleTrash, '#card').generateCard();
     cardSection.addItem(newCard, position);
 }
 
@@ -179,8 +175,3 @@ const validatorEditAvatar = new FormValidator(validationSettings, avatarPopup.po
 validatorEditProfile.enableValidation();
 validatorAddCard.enableValidation();
 validatorEditAvatar.enableValidation();
-
-export {
-    userId
-}
-

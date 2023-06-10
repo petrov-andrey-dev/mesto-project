@@ -88,4 +88,4 @@ export default class Api {
             headers: this._headers
         })
     };
-}
+};
