@@ -1,0 +1,7 @@
+.card__like_liked {
+    background-image: url(../../../../images/like-liked.svg);
+}
+.card__like_liked:hover {
+    opacity: 1;
+}
+

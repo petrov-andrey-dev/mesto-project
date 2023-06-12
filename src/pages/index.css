@@ -16,21 +16,21 @@
 @import url(../blocks/profile/__name/profile__name.css);
 @import url(../blocks/profile/__description/profile__description.css);
 @import url(../blocks/profile/__edit-info/profile__edit-info.css);
-@import url(../blocks/profile/__add-post/profile__add-post.css);
+@import url(../blocks/profile/__add-card/profile__add-card.css);
 
-@import url(../blocks/posts/posts.css);
-@import url(../blocks/posts/__grid/posts__grid.css);
+@import url(../blocks/cards/cards.css);
+@import url(../blocks/cards/__grid/cards__grid.css);
 
-@import url(../blocks/post/post.css);
-@import url(../blocks/post/__open-img/post__open-img.css);
-@import url(../blocks/post/__img/post__img.css);
-@import url(../blocks/post/__trash/post__trash.css);
-@import url(../blocks/post/__title-area/post__title-area.css);
-@import url(../blocks/post/__title/post__title.css);
-@import url(../blocks/post/__like-container/post__like-container.css);
-@import url(../blocks/post/__like/post__like.css);
-@import url(../blocks/post/__like-counter/post__like-counter.css);
-@import url(../blocks/post/__like/_liked/post__like_liked.css);
+@import url(../blocks/card/card.css);
+@import url(../blocks/card/__open-img/card__open-img.css);
+@import url(../blocks/card/__img/card__img.css);
+@import url(../blocks/card/__trash/card__trash.css);
+@import url(../blocks/card/__title-area/card__title-area.css);
+@import url(../blocks/card/__title/card__title.css);
+@import url(../blocks/card/__like-container/card__like-container.css);
+@import url(../blocks/card/__like/card__like.css);
+@import url(../blocks/card/__like-counter/card__like-counter.css);
+@import url(../blocks/card/__like/_liked/card__like_liked.css);
 
 @import url(../blocks/footer/footer.css);
 @import url(../blocks/footer/__copyright/footer__copyright.css);
